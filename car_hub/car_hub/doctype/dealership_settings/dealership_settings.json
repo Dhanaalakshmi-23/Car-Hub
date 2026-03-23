@@ -1,0 +1,170 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-23 15:32:51.956630",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "basic_informations_section",
+  "dealership_name",
+  "logo",
+  "address",
+  "financial_settings_section",
+  "default_currency",
+  "tax_percentage",
+  "minimum_profit_margin",
+  "referrel_settings_section",
+  "enable_referral",
+  "referral_bonus_amount",
+  "warranty_and_discount_section",
+  "warranty_days",
+  "max_discount_percent_without_approval",
+  "communication_section",
+  "system_email",
+  "automation_section",
+  "auto_create_evaluation_task",
+  "charges_section",
+  "default_documentation_charges",
+  "transfer_fee"
+ ],
+ "fields": [
+  {
+   "fieldname": "basic_informations_section",
+   "fieldtype": "Section Break",
+   "label": "Basic Informations"
+  },
+  {
+   "fieldname": "dealership_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Dealership Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "logo",
+   "fieldtype": "Attach Image",
+   "label": "Logo"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "financial_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Financial Settings"
+  },
+  {
+   "fieldname": "default_currency",
+   "fieldtype": "Link",
+   "label": "Default Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "tax_percentage",
+   "fieldtype": "Percent",
+   "label": "Tax Percentage"
+  },
+  {
+   "fieldname": "minimum_profit_margin",
+   "fieldtype": "Percent",
+   "label": "Minimum Profit Margin"
+  },
+  {
+   "fieldname": "referrel_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Referrel Settings"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_referral",
+   "fieldtype": "Check",
+   "label": "Enable Referral"
+  },
+  {
+   "depends_on": "eval:doc.enable_referral==1;",
+   "fieldname": "referral_bonus_amount",
+   "fieldtype": "Currency",
+   "label": "Referral bonus amount "
+  },
+  {
+   "fieldname": "warranty_and_discount_section",
+   "fieldtype": "Section Break",
+   "label": "Warranty and Discount"
+  },
+  {
+   "fieldname": "warranty_days",
+   "fieldtype": "Int",
+   "label": "Warranty days"
+  },
+  {
+   "fieldname": "max_discount_percent_without_approval",
+   "fieldtype": "Percent",
+   "label": "Max Discount Percent Without Approval"
+  },
+  {
+   "fieldname": "communication_section",
+   "fieldtype": "Section Break",
+   "label": "Communication"
+  },
+  {
+   "fieldname": "system_email",
+   "fieldtype": "Data",
+   "label": "System Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "automation_section",
+   "fieldtype": "Section Break",
+   "label": "Automation"
+  },
+  {
+   "default": "0",
+   "fieldname": "auto_create_evaluation_task",
+   "fieldtype": "Check",
+   "label": "Auto Create Evaluation Task"
+  },
+  {
+   "fieldname": "charges_section",
+   "fieldtype": "Section Break",
+   "label": "Charges"
+  },
+  {
+   "fieldname": "default_documentation_charges",
+   "fieldtype": "Currency",
+   "label": "Default Documentation Charges"
+  },
+  {
+   "fieldname": "transfer_fee",
+   "fieldtype": "Currency",
+   "label": "Transfer Fee"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-03-23 16:11:14.677110",
+ "modified_by": "Administrator",
+ "module": "Car Hub",
+ "name": "Dealership Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
