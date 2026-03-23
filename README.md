@@ -39,6 +39,3 @@ This app can use GitHub Actions for CI. The following workflows are configured:
 ### License
 
 mit
-=======
-# Car-Hub
->>>>>>> 0a53842b508aaf48aa8ff78a4d2a5d9fce67a3e9
