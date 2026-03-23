@@ -1,3 +1,13 @@
+__pycache__/
+*.pyc
+node_modules/
+.env
+*.log
+*.sqlite3
+sites/
+.env/
+*.swp
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
