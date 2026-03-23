@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 ### Car Hub
 
 Second hand car dealership and consulting platform
