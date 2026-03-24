@@ -9,28 +9,12 @@ class CustomerRegistry(Document):
 
     def validate(self):
         self.set_full_name()
-        self.validate_phone()
-        self.validate_email()
         self.validate_budget()
         self.validate_referral()
         self.validate_corporate_fields()
 
     def set_full_name(self):
         self.full_name = f"{self.first_name} {self.last_name or ''}".strip()
-
-    def validate_phone(self):
-
-        if not re.match(r'^\d{10}$', self.phone_number):
-            frappe.throw("Phone number must be 10 digits")
-
-        existing = frappe.db.exists("CustomerRegistry", {"phone_number": self.phone_number, "name": ["!=", self.name]})
-        if existing:
-            frappe.throw("Phone number must be unique")
-
-    def validate_email(self):
-
-        if not re.match(r'^\S+@\S+\.\S+$', self.email_address):
-            frappe.throw("Invalid email format")
 
     def validate_budget(self):
         if self.min_budget and self.max_budget:

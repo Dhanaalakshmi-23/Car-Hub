@@ -1,25 +1,256 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:registration_number",
  "creation": "2026-03-24 10:10:13.918076",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_qtdz"
+  "basic_informations_section",
+  "registration_number",
+  "manufacturer",
+  "model",
+  "vehicle_classification",
+  "license_plate_number",
+  "vehicle_identity_section",
+  "vin_number",
+  "engine_number",
+  "chassis_number",
+  "registration_details_section",
+  "rto_location",
+  "registration_date",
+  "rc_status",
+  "manufacturing_information_section",
+  "year_of_manufacture",
+  "color",
+  "fuel_type",
+  "transmission_type",
+  "odometerkm",
+  "ownership_and_insurrance_section",
+  "number_of_previous_owner",
+  "insurance_validity_date",
+  "acquisition_details_section",
+  "acquired_from",
+  "acquisition_date",
+  "acquisition_cost",
+  "investment_section",
+  "refurbishment_cost",
+  "total_investment",
+  "pricing_section",
+  "expected_selling_price",
+  "minimum_price",
+  "section_break_bxee",
+  "status",
+  "condition_rating",
+  "remarks"
  ],
  "fields": [
   {
-   "fieldname": "section_break_qtdz",
-   "fieldtype": "Section Break"
+   "fieldname": "registration_number",
+   "fieldtype": "Data",
+   "label": "Registration Number",
+   "unique": 1
+  },
+  {
+   "fieldname": "manufacturer",
+   "fieldtype": "Link",
+   "label": "Manufacturer",
+   "options": "Manufacturer"
+  },
+  {
+   "fieldname": "model",
+   "fieldtype": "Data",
+   "label": "Model"
+  },
+  {
+   "fieldname": "vehicle_classification",
+   "fieldtype": "Link",
+   "label": "Vehicle Classification",
+   "options": "Vehicle Classification"
+  },
+  {
+   "fieldname": "manufacturing_information_section",
+   "fieldtype": "Section Break",
+   "label": "Specifications"
+  },
+  {
+   "fieldname": "year_of_manufacture",
+   "fieldtype": "Int",
+   "label": "Year of Manufacture"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Data",
+   "label": "Color"
+  },
+  {
+   "fieldname": "fuel_type",
+   "fieldtype": "Select",
+   "label": "Fuel Type",
+   "options": "Petrol\nDiesel\nCNG\nElectric\nHybrid"
+  },
+  {
+   "fieldname": "transmission_type",
+   "fieldtype": "Select",
+   "label": "Transmission Type",
+   "options": "Manual\nAutomatic\nCVT"
+  },
+  {
+   "fieldname": "basic_informations_section",
+   "fieldtype": "Section Break",
+   "label": "Basic Informations"
+  },
+  {
+   "fieldname": "number_of_previous_owner",
+   "fieldtype": "Int",
+   "label": "Number of Previous Owner"
+  },
+  {
+   "fieldname": "insurance_validity_date",
+   "fieldtype": "Date",
+   "label": "Insurance Validity Date"
+  },
+  {
+   "fieldname": "acquisition_details_section",
+   "fieldtype": "Section Break",
+   "label": "Acquisition Details"
+  },
+  {
+   "fieldname": "acquired_from",
+   "fieldtype": "Link",
+   "label": "Acquired From",
+   "options": "Seller Registry"
+  },
+  {
+   "fieldname": "acquisition_date",
+   "fieldtype": "Date",
+   "label": "Acquisition Date"
+  },
+  {
+   "fieldname": "acquisition_cost",
+   "fieldtype": "Currency",
+   "label": "Acquisition Cost"
+  },
+  {
+   "fieldname": "odometerkm",
+   "fieldtype": "Float",
+   "label": "Odometer(KM)"
+  },
+  {
+   "fieldname": "ownership_and_insurrance_section",
+   "fieldtype": "Section Break",
+   "label": "Ownership and Insurrance"
+  },
+  {
+   "fieldname": "investment_section",
+   "fieldtype": "Section Break",
+   "label": "Investment"
+  },
+  {
+   "fieldname": "refurbishment_cost",
+   "fieldtype": "Currency",
+   "label": "Refurbishment Cost"
+  },
+  {
+   "fieldname": "total_investment",
+   "fieldtype": "Currency",
+   "label": "Total Investment",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pricing_section",
+   "fieldtype": "Section Break",
+   "label": "Pricing"
+  },
+  {
+   "fieldname": "expected_selling_price",
+   "fieldtype": "Currency",
+   "label": "Expected Selling Price"
+  },
+  {
+   "fieldname": "minimum_price",
+   "fieldtype": "Currency",
+   "label": "Minimum Price"
+  },
+  {
+   "fieldname": "section_break_bxee",
+   "fieldtype": "Section Break",
+   "label": "Status and Condition"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "In Evaluation\nUnder Refurbishment\nAvailable for Sale\nReserved\nSold\nWritten Off"
+  },
+  {
+   "depends_on": "eval:doc.status!='In Evaluation;",
+   "fieldname": "condition_rating",
+   "fieldtype": "Select",
+   "label": "Condition Rating",
+   "options": "Excellent\nGood\nFair\nPoor"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "license_plate_number",
+   "fieldtype": "Data",
+   "label": "License Plate Number"
+  },
+  {
+   "fieldname": "vehicle_identity_section",
+   "fieldtype": "Section Break",
+   "label": "Vehicle Identity"
+  },
+  {
+   "fieldname": "vin_number",
+   "fieldtype": "Data",
+   "label": "VIN Number",
+   "unique": 1
+  },
+  {
+   "fieldname": "engine_number",
+   "fieldtype": "Data",
+   "label": "Engine Number"
+  },
+  {
+   "fieldname": "chassis_number",
+   "fieldtype": "Data",
+   "label": "Chassis Number"
+  },
+  {
+   "fieldname": "registration_details_section",
+   "fieldtype": "Section Break",
+   "label": "Registration Details"
+  },
+  {
+   "fieldname": "rto_location",
+   "fieldtype": "Date",
+   "label": "RTO Location"
+  },
+  {
+   "fieldname": "registration_date",
+   "fieldtype": "Date",
+   "label": "Registration Date"
+  },
+  {
+   "fieldname": "rc_status",
+   "fieldtype": "Select",
+   "label": "RC Status",
+   "options": "Active\nExpired\nPending Transfer\nTransferred"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-24 10:10:13.918076",
+ "modified": "2026-03-24 13:06:23.985501",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Vehicle Inventory",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
