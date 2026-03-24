@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class VehicleImage(Document):
+class VehicleHistory(Document):
 	pass

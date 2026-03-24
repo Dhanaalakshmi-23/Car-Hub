@@ -1,25 +1,90 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "SELL-.YYYY.-.#####",
  "creation": "2026-03-24 10:58:50.642824",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_tysv"
+  "seller_name",
+  "phone_number",
+  "email_address",
+  "seller_type",
+  "address",
+  "id_proof_type",
+  "id_proof_number",
+  "is_blacklisted",
+  "vehicle_history"
  ],
  "fields": [
   {
-   "fieldname": "section_break_tysv",
-   "fieldtype": "Section Break"
+   "fieldname": "seller_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Seller Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "phone_number",
+   "fieldtype": "Phone",
+   "in_list_view": 1,
+   "label": "Phone Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "email_address",
+   "fieldtype": "Data",
+   "label": "Email Address",
+   "options": "Email"
+  },
+  {
+   "fieldname": "seller_type",
+   "fieldtype": "Select",
+   "label": "Seller Type",
+   "options": "Individual Owner\nAuction House\nOther Dealer\nInsurance Salvage Address"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "depends_on": "eval:doc.seller_type==\"Individual Owner\";",
+   "fieldname": "id_proof_type",
+   "fieldtype": "Select",
+   "label": "ID Proof Type",
+   "mandatory_depends_on": "eval:doc.seller_type==\"Individual Owner\";",
+   "options": "Aadhar\nPAN\nDriving License\nPassport"
+  },
+  {
+   "depends_on": "eval:doc.seller_type==\"Individual Owner\";",
+   "fieldname": "id_proof_number",
+   "fieldtype": "Data",
+   "label": "ID Proof Number",
+   "mandatory_depends_on": "eval:doc.seller_type==\"Individual Owner\";"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_blacklisted",
+   "fieldtype": "Check",
+   "label": "Is Blacklisted"
+  },
+  {
+   "fieldname": "vehicle_history",
+   "fieldtype": "Table",
+   "label": "Vehicle History",
+   "options": "Vehicle History",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-24 10:58:50.642824",
+ "modified": "2026-03-24 14:41:30.959928",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Seller Registry",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
