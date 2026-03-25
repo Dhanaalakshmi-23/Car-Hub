@@ -1,0 +1,112 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-24 21:33:54.646134",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "main_fields_section",
+  "vehicle_acquisition",
+  "vehicle_inventory",
+  "evaluator",
+  "status",
+  "evaluation_fields_section",
+  "refurbishment_cost",
+  "recommended_price",
+  "overall_condition",
+  "notes",
+  "evaluation_checklist"
+ ],
+ "fields": [
+  {
+   "fieldname": "main_fields_section",
+   "fieldtype": "Section Break",
+   "label": "Main Fields"
+  },
+  {
+   "fieldname": "vehicle_acquisition",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Vehicle Acquisition",
+   "options": "Vehicle Acquisition",
+   "reqd": 1
+  },
+  {
+   "fieldname": "vehicle_inventory",
+   "fieldtype": "Link",
+   "label": "Vehicle Inventory",
+   "options": "Vehicle Inventory"
+  },
+  {
+   "fieldname": "evaluator",
+   "fieldtype": "Link",
+   "label": "Evaluator",
+   "options": "User"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Pending\nIn Progress\nCompleted"
+  },
+  {
+   "fieldname": "evaluation_fields_section",
+   "fieldtype": "Section Break",
+   "label": "Evaluation Fields"
+  },
+  {
+   "fieldname": "refurbishment_cost",
+   "fieldtype": "Currency",
+   "label": "Refurbishment Cost"
+  },
+  {
+   "fieldname": "recommended_price",
+   "fieldtype": "Currency",
+   "label": "Recommended Price"
+  },
+  {
+   "fieldname": "overall_condition",
+   "fieldtype": "Select",
+   "label": "Overall Condition",
+   "options": "Excellent\nGood\nFair\nPoor\nNot Worth Refurbishing"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Long Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "evaluation_checklist",
+   "fieldtype": "Table",
+   "label": "Evaluation Checklist",
+   "options": "Evaluation Checklist"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-03-24 21:37:31.225994",
+ "modified_by": "Administrator",
+ "module": "Car Hub",
+ "name": "Vehicle Evaluation Task",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

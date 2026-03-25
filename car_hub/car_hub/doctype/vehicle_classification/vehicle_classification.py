@@ -11,7 +11,7 @@ class VehicleClassification(NestedSet):
         self.validate_leaf_nodes()
         self.validate_group_nodes()
         self.validate_popularity_score()
-        self.depreciation_rate()
+        self.depreciation_rate_validation()
 
     def validate_price_range(self):
         if self.min_price and self.max_price:
@@ -33,8 +33,8 @@ class VehicleClassification(NestedSet):
             if self.popularity_score < 0 or self.popularity_score > 100:
                 frappe.throw("Popularity Score must be between 0 and 100")
                 
-    def depreciation_rate(self):
+    def depreciation_rate_validation(self):
         if self.depreciation_rate:
-            if self.popularity_score < 0 or self.popularity_score > 100:
-                frappe.throw("Popularity Score must be between 0 and 100")
+            if self.depreciation_rate < 0 or self.depreciation_rate > 100:
+                frappe.throw("Depreciation Rate must be between 0 and 100")
         

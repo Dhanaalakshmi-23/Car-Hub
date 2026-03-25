@@ -11,11 +11,13 @@
   "rgt",
   "is_group",
   "old_parent",
+  "column_break_swbb",
   "parent_vehicle_classification",
   "classification_name",
   "market_information_section",
   "min_price",
   "max_price",
+  "column_break_dyxu",
   "depreciation_rate",
   "popularity_score",
   "flags1_section",
@@ -109,13 +111,21 @@
    "fieldname": "is_active",
    "fieldtype": "Check",
    "label": "Is Active"
+  },
+  {
+   "fieldname": "column_break_swbb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_dyxu",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2026-03-23 16:31:47.630612",
+ "modified": "2026-03-25 10:52:55.143429",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Vehicle Classification",

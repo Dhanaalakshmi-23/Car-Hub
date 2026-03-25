@@ -11,7 +11,6 @@
   "manufacturer",
   "model",
   "vehicle_classification",
-  "license_plate_number",
   "vehicle_identity_section",
   "vin_number",
   "engine_number",
@@ -33,6 +32,7 @@
   "acquired_from",
   "acquisition_date",
   "acquisition_cost",
+  "acquisition_reference",
   "investment_section",
   "refurbishment_cost",
   "total_investment",
@@ -42,7 +42,8 @@
   "section_break_bxee",
   "status",
   "condition_rating",
-  "remarks"
+  "remarks",
+  "vehicle_images"
  ],
  "fields": [
   {
@@ -196,13 +197,9 @@
    "label": "Remarks"
   },
   {
-   "fieldname": "license_plate_number",
-   "fieldtype": "Data",
-   "label": "License Plate Number"
-  },
-  {
    "fieldname": "vehicle_identity_section",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Vehicle Identity"
   },
   {
@@ -224,6 +221,7 @@
   {
    "fieldname": "registration_details_section",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Registration Details"
   },
   {
@@ -241,12 +239,23 @@
    "fieldtype": "Select",
    "label": "RC Status",
    "options": "Active\nExpired\nPending Transfer\nTransferred"
+  },
+  {
+   "fieldname": "vehicle_images",
+   "fieldtype": "Attach Image",
+   "label": "Vehicle Images"
+  },
+  {
+   "fieldname": "acquisition_reference",
+   "fieldtype": "Link",
+   "label": "Acquisition Reference",
+   "options": "Vehicle Acquisition"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-24 13:06:23.985501",
+ "modified": "2026-03-25 16:22:30.739763",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Vehicle Inventory",

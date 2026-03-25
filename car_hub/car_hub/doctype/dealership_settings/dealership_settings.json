@@ -7,24 +7,30 @@
  "field_order": [
   "basic_informations_section",
   "dealership_name",
-  "logo",
+  "system_email",
+  "column_break_johu",
   "address",
+  "logo",
   "financial_settings_section",
   "default_currency",
+  "column_break_zsgw",
   "tax_percentage",
+  "column_break_ifxf",
   "minimum_profit_margin",
   "referrel_settings_section",
   "enable_referral",
+  "column_break_ktij",
   "referral_bonus_amount",
   "warranty_and_discount_section",
   "warranty_days",
+  "column_break_aric",
   "max_discount_percent_without_approval",
-  "communication_section",
-  "system_email",
   "automation_section",
+  "last_evaluator",
   "auto_create_evaluation_task",
   "charges_section",
   "default_documentation_charges",
+  "column_break_txos",
   "transfer_fee"
  ],
  "fields": [
@@ -104,11 +110,6 @@
    "label": "Max Discount Percent Without Approval"
   },
   {
-   "fieldname": "communication_section",
-   "fieldtype": "Section Break",
-   "label": "Communication"
-  },
-  {
    "fieldname": "system_email",
    "fieldtype": "Data",
    "label": "System Email",
@@ -139,13 +140,43 @@
    "fieldname": "transfer_fee",
    "fieldtype": "Currency",
    "label": "Transfer Fee"
+  },
+  {
+   "fieldname": "column_break_johu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_zsgw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ifxf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ktij",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_aric",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_txos",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_evaluator",
+   "fieldtype": "Link",
+   "label": "Last Evaluator",
+   "options": "User"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-23 16:11:14.677110",
+ "modified": "2026-03-25 15:56:03.107432",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Dealership Settings",
