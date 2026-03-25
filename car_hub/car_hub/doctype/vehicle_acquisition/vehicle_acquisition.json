@@ -1,0 +1,186 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-24 15:19:05.852572",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_viyb",
+  "amended_from",
+  "acquisition_id",
+  "seller",
+  "seller_name",
+  "phone_number",
+  "seller_type",
+  "acquisition_date",
+  "evaluator",
+  "status",
+  "vehicles",
+  "financial_fields_section",
+  "total_purchase_cost",
+  "transportation_charges",
+  "documentation_fees",
+  "advance_paid",
+  "tax_percentage",
+  "tax_amount",
+  "grand_total",
+  "cancellation_reason"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_viyb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Vehicle Acquisition",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "acquisition_id",
+   "fieldtype": "Data",
+   "label": "Acquisition ID",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "seller",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Seller",
+   "options": "Seller Registry",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "seller.seller_name",
+   "fieldname": "seller_name",
+   "fieldtype": "Data",
+   "label": "Seller Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "seller.phone_number",
+   "fieldname": "phone_number",
+   "fieldtype": "Phone",
+   "label": "Phone Number",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "seller.seller_type",
+   "fieldname": "seller_type",
+   "fieldtype": "Select",
+   "label": "Seller Type",
+   "read_only": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "acquisition_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Acquisition Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "evaluator",
+   "fieldtype": "Link",
+   "label": "Evaluator",
+   "options": "User"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nPending Approval\nApproved\nFinalized\nCancelled\nAmended",
+   "read_only": 1
+  },
+  {
+   "fieldname": "financial_fields_section",
+   "fieldtype": "Section Break",
+   "label": "Financial Fields"
+  },
+  {
+   "fieldname": "total_purchase_cost",
+   "fieldtype": "Currency",
+   "label": "Total Purchase Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "transportation_charges",
+   "fieldtype": "Currency",
+   "label": "Transportation Charges"
+  },
+  {
+   "fieldname": "documentation_fees",
+   "fieldtype": "Currency",
+   "label": "Documentation Fees"
+  },
+  {
+   "fieldname": "advance_paid",
+   "fieldtype": "Currency",
+   "label": "Advance Paid"
+  },
+  {
+   "fieldname": "tax_percentage",
+   "fieldtype": "Float",
+   "label": "Tax Percentage"
+  },
+  {
+   "fieldname": "tax_amount",
+   "fieldtype": "Currency",
+   "label": "Tax Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "grand_total",
+   "fieldtype": "Currency",
+   "label": "Grand Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "vehicles",
+   "fieldtype": "Table",
+   "label": "Vehicles",
+   "options": "Vehicle Acquisition Item"
+  },
+  {
+   "depends_on": "eval:doc.status==\"Cancelled\";",
+   "fieldname": "cancellation_reason",
+   "fieldtype": "Small Text",
+   "label": "Cancellation Reason"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-03-25 15:16:58.069277",
+ "modified_by": "Administrator",
+ "module": "Car Hub",
+ "name": "Vehicle Acquisition",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

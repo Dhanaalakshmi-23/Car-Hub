@@ -1,22 +1,57 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2026-03-23 21:24:54.569316",
+ "creation": "2026-03-25 12:47:51.480265",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "section_break_yeff",
+  "amended_from",
+  "customer",
   "vehicle",
+  "vehicle_model",
+  "registration_number",
   "purchase_date",
   "sale_amount",
-  "vehicle_model",
-  "registration_number"
+  "status"
  ],
  "fields": [
   {
+   "fieldname": "section_break_yeff",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Customer Purchase",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer Registry"
+  },
+  {
+   "fetch_from": "customer.preferred_vehicle_types",
    "fieldname": "vehicle",
    "fieldtype": "Link",
    "label": "Vehicle",
-   "options": "Vehicle Inventory"
+   "options": "Vehicle Classification"
+  },
+  {
+   "fieldname": "vehicle_model",
+   "fieldtype": "Data",
+   "label": "Vehicle Model"
+  },
+  {
+   "fieldname": "registration_number",
+   "fieldtype": "Data",
+   "label": "Registration Number"
   },
   {
    "fieldname": "purchase_date",
@@ -29,26 +64,36 @@
    "label": "Sale Amount"
   },
   {
-   "fieldname": "registration_number",
-   "fieldtype": "Data",
-   "label": "Registration Number"
-  },
-  {
-   "fieldname": "vehicle_model",
-   "fieldtype": "Data",
-   "label": "Vehicle Model"
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nCompleted\nCancelled"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "istable": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2026-03-24 10:18:13.050939",
+ "modified": "2026-03-25 13:04:51.191503",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Customer Purchase",
  "owner": "Administrator",
- "permissions": [],
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
  "sort_field": "creation",

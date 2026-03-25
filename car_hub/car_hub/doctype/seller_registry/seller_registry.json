@@ -8,12 +8,14 @@
  "field_order": [
   "seller_name",
   "phone_number",
-  "email_address",
-  "seller_type",
   "address",
+  "email_address",
+  "column_break_hbpo",
+  "seller_type",
   "id_proof_type",
   "id_proof_number",
   "is_blacklisted",
+  "seller_vehicle_history_section",
   "vehicle_history"
  ],
  "fields": [
@@ -73,14 +75,23 @@
    "fieldname": "vehicle_history",
    "fieldtype": "Table",
    "label": "Vehicle History",
-   "options": "Vehicle History",
+   "options": "Seller Vehicle History",
    "read_only": 1
+  },
+  {
+   "fieldname": "column_break_hbpo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "seller_vehicle_history_section",
+   "fieldtype": "Section Break",
+   "label": "Seller Vehicle History"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-24 14:41:30.959928",
+ "modified": "2026-03-25 14:37:25.684513",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Seller Registry",

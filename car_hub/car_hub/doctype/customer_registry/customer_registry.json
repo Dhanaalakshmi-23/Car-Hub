@@ -8,19 +8,22 @@
  "field_order": [
   "basic_informations_section",
   "first_name",
-  "last_name",
   "full_name",
-  "customer_type",
   "company_name",
+  "column_break_yrzm",
+  "last_name",
+  "customer_type",
   "gst_number",
   "profile",
   "contact_information_section",
   "phone_number",
+  "column_break_pztt",
   "email_address",
   "preferences_section",
   "preferred_vehicle_types",
   "budget_section",
   "min_budget",
+  "column_break_wsof",
   "max_budget",
   "referral_section",
   "referral_source",
@@ -147,7 +150,7 @@
    "fieldname": "purchase_history",
    "fieldtype": "Table",
    "label": "Purchase History",
-   "options": "Customer Purchase",
+   "options": "Customer Purchase History",
    "read_only": 1
   },
   {
@@ -159,6 +162,7 @@
    "fieldname": "total_purchases",
    "fieldtype": "Int",
    "label": "Total Purchases",
+   "permlevel": 1,
    "read_only": 1
   },
   {
@@ -180,12 +184,24 @@
    "fieldname": "gst_number",
    "fieldtype": "Data",
    "label": "GST Number"
+  },
+  {
+   "fieldname": "column_break_yrzm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_pztt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_wsof",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-23 21:37:58.696580",
+ "modified": "2026-03-25 12:55:47.127077",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Customer Registry",
