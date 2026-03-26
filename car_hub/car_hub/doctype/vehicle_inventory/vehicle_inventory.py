@@ -101,7 +101,7 @@ def notify_customers(vehicle):
 	for cust in customers:
 		if cust.email_address:
 			frappe.sendmail(
-				recipients=cust.email_address,
+				recipients=["dhanaalakshminarayanan@gmail.com"],
 				subject="New Vehicle Available",
 				message=f"""
 Hello,

@@ -35,7 +35,7 @@ class CustomerPurchase(Document):
         customer_doc = frappe.get_doc("Customer Registry", self.customer)
 
         customer_doc.append("purchase_history", {
-            "vehicle": self.vehicle,  # Link → Vehicle Classification
+            "vehicle": self.vehicle, 
             "vehicle_model": self.vehicle_model,
             "registration_number": self.registration_number,
             "purchase_date": self.purchase_date,

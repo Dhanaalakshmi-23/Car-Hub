@@ -1,0 +1,241 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "VS-.YYYY.-.#####",
+ "creation": "2026-03-25 17:15:31.035197",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_23lr",
+  "amended_from",
+  "sale_number",
+  "customer",
+  "customer_name",
+  "phone_number",
+  "email_address",
+  "referrer",
+  "vehicle",
+  "sale_date",
+  "sales_consultant",
+  "payment_mode",
+  "status",
+  "accessory_section_section",
+  "accessories",
+  "pricing_section_section",
+  "selling_price",
+  "documentation_charges",
+  "transfer_fee",
+  "insurance_charges",
+  "accessories_total",
+  "subtotal",
+  "discount",
+  "tax_amount",
+  "grand_total",
+  "profit_margin"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_23lr",
+   "fieldtype": "Section Break",
+   "label": "Header Section"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Vehicle Sale",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "sale_number",
+   "fieldtype": "Data",
+   "label": "Sale Number"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer Registry",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "customer.full_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name"
+  },
+  {
+   "fetch_from": "customer.phone_number",
+   "fieldname": "phone_number",
+   "fieldtype": "Phone",
+   "label": "Phone Number"
+  },
+  {
+   "fetch_from": "customer.email_address",
+   "fieldname": "email_address",
+   "fieldtype": "Data",
+   "label": "Email Address",
+   "options": "Email"
+  },
+  {
+   "fetch_from": "customer.referred_by",
+   "fieldname": "referrer",
+   "fieldtype": "Link",
+   "label": "Referrer",
+   "options": "Customer Registry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "vehicle",
+   "fieldtype": "Link",
+   "label": "Vehicle",
+   "options": "Vehicle Inventory"
+  },
+  {
+   "fieldname": "sale_date",
+   "fieldtype": "Date",
+   "label": "Sale Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sales_consultant",
+   "fieldtype": "Link",
+   "label": "Sales Consultant",
+   "options": "User"
+  },
+  {
+   "fieldname": "payment_mode",
+   "fieldtype": "Select",
+   "label": "Payment Mode",
+   "options": "Full Payment\nLoan Assisted\nInstallment Plan",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Workflow"
+  },
+  {
+   "fieldname": "pricing_section_section",
+   "fieldtype": "Section Break",
+   "label": "Pricing Section"
+  },
+  {
+   "fetch_from": "vehicle.expected_selling_price",
+   "fieldname": "selling_price",
+   "fieldtype": "Currency",
+   "label": "Selling Price",
+   "reqd": 1
+  },
+  {
+   "fieldname": "documentation_charges",
+   "fieldtype": "Currency",
+   "label": "Documentation Charges",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "transfer_fee",
+   "fieldtype": "Currency",
+   "label": "Transfer Fee",
+   "precision": "2"
+  },
+  {
+   "default": "0",
+   "fieldname": "insurance_charges",
+   "fieldtype": "Currency",
+   "label": "Insurance Charges",
+   "precision": "2"
+  },
+  {
+   "bold": 1,
+   "fieldname": "subtotal",
+   "fieldtype": "Currency",
+   "label": "Subtotal",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "description": "Should not exceed max discount from settings",
+   "fieldname": "discount",
+   "fieldtype": "Currency",
+   "label": "Discount"
+  },
+  {
+   "fieldname": "tax_amount",
+   "fieldtype": "Currency",
+   "label": "Tax Amount",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "grand_total",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Grand Total",
+   "read_only": 1
+  },
+  {
+   "description": "Selling Price - Total Investment",
+   "fetch_from": "vehicle.expected_selling_price",
+   "fieldname": "profit_margin",
+   "fieldtype": "Currency",
+   "label": "Profit Margin",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accessory_section_section",
+   "fieldtype": "Section Break",
+   "label": "Accessory Section"
+  },
+  {
+   "fieldname": "accessories",
+   "fieldtype": "Table",
+   "label": "Accessories",
+   "options": "Vehicle Accessories"
+  },
+  {
+   "fieldname": "accessories_total",
+   "fieldtype": "Float",
+   "label": "Accessories Total",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-03-26 11:14:57.425160",
+ "modified_by": "Administrator",
+ "module": "Car Hub",
+ "name": "Vehicle Sale",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
