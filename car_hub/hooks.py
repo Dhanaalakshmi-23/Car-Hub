@@ -5,6 +5,23 @@ app_description = "Second hand car dealership and consulting platform"
 app_email = "dhanaalakshminarayanan@gmail.com"
 app_license = "mit"
 
+scheduler_events = {
+    "daily": [
+        "car_hub.workflow.vehicle_sale_workflow.py"
+    ]
+}
+
+doc_events = {
+    "Vehicle Sale": {
+        "on_submit": "car_hub.notifications.vehicle_sale.on_submit",
+        "on_cancel": "car_hub.notifications.vehicle_sale.on_cancel",
+        "on_update": "car_hub.notifications.vehicle_sale.on_update"
+    },
+    "Vehicle Evaluation": {
+        "on_submit": "car_hub.notifications.vehicle_evaluation.on_submit"
+    }
+}
+
 # Apps
 # ------------------
 

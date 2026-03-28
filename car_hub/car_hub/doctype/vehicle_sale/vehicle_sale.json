@@ -6,6 +6,12 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "dealership_details_section",
+  "dealership_name",
+  "dealership_address",
+  "dealership_phone",
+  "dealership_email",
+  "dealership_image",
   "section_break_23lr",
   "amended_from",
   "sale_number",
@@ -163,7 +169,7 @@
    "default": "0",
    "description": "Should not exceed max discount from settings",
    "fieldname": "discount",
-   "fieldtype": "Currency",
+   "fieldtype": "Percent",
    "label": "Discount"
   },
   {
@@ -205,13 +211,46 @@
    "fieldtype": "Float",
    "label": "Accessories Total",
    "read_only": 1
+  },
+  {
+   "fieldname": "dealership_details_section",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Dealership Details",
+   "read_only": 1
+  },
+  {
+   "fieldname": "dealership_name",
+   "fieldtype": "Data",
+   "label": "Dealership Name"
+  },
+  {
+   "fieldname": "dealership_address",
+   "fieldtype": "Small Text",
+   "label": "Dealership Address"
+  },
+  {
+   "fieldname": "dealership_phone",
+   "fieldtype": "Phone",
+   "label": "Dealership Phone"
+  },
+  {
+   "fieldname": "dealership_email",
+   "fieldtype": "Data",
+   "label": "Dealership Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "dealership_image",
+   "fieldtype": "Attach Image",
+   "label": "Dealership Image"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-26 11:14:57.425160",
+ "modified": "2026-03-28 20:42:15.310087",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Vehicle Sale",
