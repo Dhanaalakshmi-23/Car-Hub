@@ -9,14 +9,28 @@ class VehicleSale(Document):
 
     def before_insert(self):
         self.sale_date = frappe.utils.today()
+        self.fetch_dealership_details()
 
     def validate(self):
-        self.fetch_customer_details()
+        #self.fetch_customer_details()
         self.fetch_vehicle_price()
         self.calculate_addons()
         self.calculate_totals()
         self.validate_discount()
         self.calculate_profit()
+        self.check_discount_limit()
+    def before_save(self):
+        self.handle_discount_workflow()
+    def before_submit(self):
+        self.prevent_submit_without_approval()
+
+    def fetch_dealership_details(self):
+        settings = frappe.get_single("Dealership Settings")
+
+        self.dealership_name = settings.dealership_name
+        self.dealership_address = settings.address
+        self.dealership_email = settings.system_email
+        self.dealership_logo = settings.logo
 
     def fetch_vehicle_price(self):
         if self.vehicle and not self.selling_price:
@@ -48,7 +62,7 @@ class VehicleSale(Document):
         self.subtotal = (
             (self.selling_price or 0)
             + (self.documentation_charges or 0)
-            + (self.transfer_fees or 0)
+            + (self.transfer_fee or 0)
             + (self.insurance_charges or 0)
             + (self.addons_total or 0)
         )
@@ -65,7 +79,7 @@ class VehicleSale(Document):
     def validate_discount(self):
         max_discount = frappe.db.get_single_value(
             "Dealership Settings",
-            "max_discount"
+            "max_discount_percent_without_approval"
         ) or 0
 
         if (self.discount or 0) > max_discount:
@@ -111,3 +125,66 @@ class VehicleSale(Document):
             "status",
             status
         )
+
+    #Check discount amount
+    def check_discount_limit(self):
+        max_discount = frappe.db.get_single_value(
+            "Dealership Settings", "max_discount_percent_without_approval"
+        ) or 0
+
+        if self.discount and self.discount > max_discount:
+            if self.workflow_state != "Pending Discount Approval":
+                frappe.msgprint(
+                    "Discount exceeds allowed limit. Moving to Pending Approval."
+                )
+    # Handle auto move approval state and notifications
+    def handle_discount_workflow(self):
+        max_discount = frappe.db.get_single_value(
+            "Dealership Settings", "max_discount_percent_without_approval"
+        ) or 0
+
+        if self.discount and self.discount > max_discount:
+
+            # Move to Pending Approval
+            if self.workflow_state != "Pending Discount Approval":
+                self.workflow_state = "Pending Discount Approval"
+                self.notify_managers()
+
+        else:
+            # If discount corrected, allow back to Draft
+            if self.workflow_state == "Pending Discount Approval":
+                self.workflow_state = "Draft"
+
+    # prevent submission if discount is not approved
+    def prevent_submit_without_approval(self):
+        max_discount = frappe.db.get_single_value(
+            "Dealership Settings", "max_discount_percent_without_approval"
+        ) or 0
+
+        if self.discount and self.discount > max_discount:
+            if self.workflow_state != "Draft":
+                frappe.throw(
+                    "Cannot submit. Discount not approved by Sales Manager."
+                )
+
+    # Notify Email to Sales Managers for Approval
+    def notify_managers(self):
+        managers = frappe.get_all(
+            "Has Role",
+            filters={"role": "Sales Manager"},
+            pluck="parent"
+        )
+
+        if not managers:
+            return
+
+        for user in managers:
+            frappe.sendmail(
+                recipients=[user],
+                subject="Discount Approval Required",
+                message=f"""
+                Vehicle Sale <b>{self.name}</b> requires approval.<br><br>
+                Discount entered: <b>{self.discount_percentage}%</b><br>
+                Please review and approve/reject.
+                """
+            )
