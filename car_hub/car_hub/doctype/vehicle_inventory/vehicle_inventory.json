@@ -185,7 +185,7 @@
    "options": "In Evaluation\nUnder Refurbishment\nAvailable for Sale\nReserved\nSold\nWritten Off"
   },
   {
-   "depends_on": "eval:doc.status!='In Evaluation;",
+   "depends_on": "eval:doc.status!='In Evaluation'",
    "fieldname": "condition_rating",
    "fieldtype": "Select",
    "label": "Condition Rating",
@@ -242,7 +242,7 @@
   },
   {
    "fieldname": "vehicle_images",
-   "fieldtype": "Attach Image",
+   "fieldtype": "Attach",
    "label": "Vehicle Images"
   },
   {

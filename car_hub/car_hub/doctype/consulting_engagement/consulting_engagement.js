@@ -11,5 +11,12 @@ frappe.ui.form.on('Consulting Engagement', {
                 }
             };
         });
+    },
+    final_recommendations: function(frm) {
+        if (frm.doc.final_recommendations === "Do Not Buy") {
+            frm.set_df_property("reason", "reqd", 1);
+        } else {
+            frm.set_df_property("reason", "reqd", 0);
+        }
     }
 });

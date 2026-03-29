@@ -9,11 +9,14 @@ from datetime import datetime
 class VehicleInventory(Document):
 
 	def validate(self):
+		self.validate_mandatory_fields()
 		self.validate_registration()
 		self.validate_year()
+		self.validate_numbers()
 		self.calculate_total_investment()
 		self.validate_prices()
 		self.check_profit_margin()
+		self.validate_leaf_category()
 		self.set_condition_auto()
 
 	def after_insert(self):
@@ -22,6 +25,21 @@ class VehicleInventory(Document):
 			"car_hub.car_hub.doctype.vehicle_inventory.vehicle_inventory.notify_customers",
 			vehicle=self.name
 		)
+
+	def validate_mandatory_fields(self):
+		if not self.registration_number:
+			frappe.throw("Registration Number is mandatory")
+
+		if not self.manufacturer:
+			frappe.throw("Manufacturer is mandatory")
+
+		if not self.vehicle_classification:
+			frappe.throw("Vehicle Classification is mandatory")
+
+		if not self.acquisition_cost:
+			frappe.throw("Acquisition Cost is mandatory")
+
+
 
 	def validate_registration(self):
 		if frappe.db.exists("Vehicle Inventory", {
@@ -33,21 +51,29 @@ class VehicleInventory(Document):
 	def validate_year(self):
 		current_year = datetime.now().year
 
-		if not self.year:
+		if not self.year_of_manufacture:
 			frappe.throw("Year of manufacture is required")
 
-		if self.year < 1950:
+		if self.year_of_manufacture < 1950:
 			frappe.throw("Year cannot be less than 1950")
 
-		if self.year > current_year:
+		if self.year_of_manufacture > current_year:
 			frappe.throw(f"Year cannot be greater than {current_year}")
+
+	def validate_numbers(self):
+		if self.odometerkm and self.odometerkm < 0:
+			frappe.throw("Odometer cannot be negative")
+		if self.acquisition_cost and self.acquisition_cost < 0:
+			frappe.throw("Acquisition cost cannot be negative")
+		if self.refurbishment_cost and self.refurbishment_cost < 0:
+			frappe.throw("Refurbishment cost cannot be negative")
 
 	def calculate_total_investment(self):
 		self.total_investment = (self.acquisition_cost or 0) + (self.refurbishment_cost or 0)
 
 	def validate_prices(self):
-		if self.expected_selling_price and self.min_price:
-			if self.min_price > self.expected_selling_price:
+		if self.expected_selling_price and self.minimum_price:
+			if self.minimum_price > self.expected_selling_price:
 				frappe.throw("Minimum price cannot exceed expected selling price")
 
 
@@ -62,6 +88,12 @@ class VehicleInventory(Document):
 				frappe.throw(
 					f"Profit margin {profit_percent:.2f}% is below minimum required {settings.min_profit_margin}%"
 				)
+	def validate_leaf_category(self):
+		if self.vehicle_classification:
+			classification_doc = frappe.get_doc("Vehicle Classification", self.vehicle_classification)
+			
+			if classification_doc.is_group:
+				frappe.throw("Please select a leaf-level Vehicle Classification")
 
 
 	def set_condition_auto(self):
@@ -99,6 +131,11 @@ def notify_customers(vehicle):
 	)
 
 	for cust in customers:
+		if not cust.min_budget or not cust.max_budget:
+			continue
+
+		if not (cust.min_budget <= doc.expected_selling_price <= cust.max_budget):
+			continue
 		if cust.email_address:
 			frappe.sendmail(
 				recipients=["dhanaalakshminarayanan@gmail.com"],

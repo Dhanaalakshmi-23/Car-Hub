@@ -6,10 +6,8 @@ import re
 
 class CustomerRegistry(Document):
 
-    def autoname(self):
-        self.name = frappe.model.naming.make_autoname("CUST-.####")
-
     def validate(self):
+        self.validate_phone()
         self.set_full_name()
         self.validate_budget()
         self.validate_referral()
@@ -23,6 +21,10 @@ class CustomerRegistry(Document):
             first = self.first_name or ""
             last = self.last_name or ""
             self.full_name = f"{first} {last}".strip()
+    def validate_phone(self):
+        if self.phone_number:
+            if not re.match(r"^[0-9]{10}$", self.phone_number):
+                frappe.throw("Phone number must be exactly 10 digits")
 
     def validate_budget(self):
         if self.min_budget and self.max_budget:
@@ -33,6 +35,8 @@ class CustomerRegistry(Document):
         if self.referral_source == "Referred by Existing Customer":
             if not self.referred_by:
                 frappe.throw("Referred By is mandatory")
+            if self.referred_by and self.name and self.referred_by == self.name:
+                frappe.throw("Customer cannot refer themselves")
 
     def validate_corporate_fields(self):
         if self.customer_type in ["Corporate Fleet", "Dealer-to-Dealer"]:
@@ -53,6 +57,6 @@ class CustomerRegistry(Document):
 
         # Referral bonus (2%)
         if self.referred_by:
-            self.referral_bonus = total_spent * 0.02
+            self.referral_bonus_earned = total_spent * 0.02
         else:
-            self.referral_bonus = 0
+            self.referral_bonus_earned = 0

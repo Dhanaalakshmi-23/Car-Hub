@@ -43,7 +43,7 @@
    "fieldname": "seller_type",
    "fieldtype": "Select",
    "label": "Seller Type",
-   "options": "Individual Owner\nAuction House\nOther Dealer\nInsurance Salvage Address"
+   "options": "Individual Owner\nAuction House\nOther Dealer\nInsurance Salvage"
   },
   {
    "fieldname": "address",
