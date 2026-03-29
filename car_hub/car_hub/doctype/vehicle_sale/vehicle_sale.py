@@ -12,7 +12,6 @@ class VehicleSale(Document):
         self.fetch_dealership_details()
 
     def validate(self):
-        #self.fetch_customer_details()
         self.fetch_vehicle_price()
         self.calculate_addons()
         self.calculate_totals()
@@ -106,26 +105,6 @@ class VehicleSale(Document):
             frappe.msgprint("Warning: Profit margin is below minimum!")
 
 
-    def on_submit(self):
-        self.update_vehicle_status("Sold")
-        # self.update_customer_history()
-
-    def before_cancel(self):
-        if not self.cancel_reason:
-            frappe.throw("Cancellation reason is required")
-
-    def on_cancel(self):
-        self.update_vehicle_status("Available for Sale")
-        # self.revert_customer_history()
-
-    def update_vehicle_status(self, status):
-        frappe.db.set_value(
-            "Vehicle Inventory",
-            self.vehicle,
-            "status",
-            status
-        )
-
     #Check discount amount
     def check_discount_limit(self):
         max_discount = frappe.db.get_single_value(
@@ -188,3 +167,78 @@ class VehicleSale(Document):
                 Please review and approve/reject.
                 """
             )
+    
+
+
+    def on_submit(self):
+        self.update_vehicle_status("Sold")
+        self.update_customer_history()
+        self.handle_referral_bonus()
+        self.log_profit()
+
+    def before_cancel(self):
+        if not self.cancel_reason:
+            frappe.throw("Cancellation reason is required")
+
+    def on_cancel(self):
+        self.update_vehicle_status("Available for Sale")
+        # self.revert_customer_history()
+
+    def update_vehicle_status(self, status):
+        frappe.db.set_value(
+            "Vehicle Inventory",
+            self.vehicle,
+            "status",
+            status
+        )
+
+    def update_customer_history(self):
+        customer = frappe.get_doc("Customer Registry", self.customer)
+
+        customer.append("purchase_history", {
+            "vehicle": self.vehicle,
+            "date": self.sale_date,
+            "sale_amount": self.grand_total
+        })
+
+        customer.save(ignore_permissions=True)
+
+    def revert_customer_history(self):
+        customer = frappe.get_doc("Customer Registry", self.customer)
+
+        customer.purchase_history = [
+            row for row in customer.purchase_history
+            if row.vehicle != self.vehicle
+        ]
+
+        customer.save(ignore_permissions=True)
+
+    def handle_referral_bonus(self):
+        customer = frappe.get_doc("Customer Registry", self.customer)
+
+        if customer.referred_by:
+            referrer = frappe.get_doc("Customer Registry", customer.referred_by)
+
+            bonus = self.grand_total * 0.02
+            referrer.referral_bonus_earned += bonus
+
+            referrer.save(ignore_permissions=True)
+
+    def reverse_referral_bonus(self):
+        customer = frappe.get_doc("Customer Registry", self.customer)
+
+        if customer.referred_by:
+            referrer = frappe.get_doc("Customer Registry", customer.referred_by)
+
+            bonus = self.grand_total * 0.02
+            referrer.referral_bonus_earned -= bonus
+
+            referrer.save(ignore_permissions=True)
+
+    def log_profit(self):
+        frappe.get_doc({
+            "doctype": "Profit Log",
+            "vehicle_sale": self.name,
+            "vehicle": self.vehicle,
+            "profit": self.profit_margin
+        }).insert(ignore_permissions=True)

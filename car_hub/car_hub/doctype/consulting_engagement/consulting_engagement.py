@@ -34,7 +34,7 @@ class ConsultingEngagement(Document):
                 frappe.throw("Expected Completion Date cannot be before Engagement Date")
 
     def validate_recommendation(self):
-        if self.final_recommendation == "Do Not Buy" and not self.reason:
+        if self.final_recommendations == "Do Not Buy" and not self.reason:
             frappe.throw("Reason is mandatory when recommendation is 'Do Not Buy'")
 
     def calculate_totals(self):
@@ -42,8 +42,8 @@ class ConsultingEngagement(Document):
         self.total_amount = 0
 
         if self.consulting_fee:
-            if self.tax_percent:
-                self.tax_amount = (self.consulting_fee * self.tax_percent) / 100
+            if self.tax_percentage:
+                self.tax_amount = (self.consulting_fee * (self.tax_percentage or 0)) / 100
 
             self.total_amount = self.consulting_fee + self.tax_amount
 

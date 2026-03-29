@@ -169,7 +169,7 @@
    "default": "0",
    "description": "Should not exceed max discount from settings",
    "fieldname": "discount",
-   "fieldtype": "Percent",
+   "fieldtype": "Currency",
    "label": "Discount"
   },
   {
@@ -189,7 +189,6 @@
   },
   {
    "description": "Selling Price - Total Investment",
-   "fetch_from": "vehicle.expected_selling_price",
    "fieldname": "profit_margin",
    "fieldtype": "Currency",
    "label": "Profit Margin",

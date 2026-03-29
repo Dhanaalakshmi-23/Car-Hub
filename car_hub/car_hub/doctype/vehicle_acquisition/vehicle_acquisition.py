@@ -126,18 +126,28 @@ class VehicleAcquisition(Document):
 
     def create_vehicle_inventory(self):
         for v in self.vehicles:
+            existing = frappe.db.exists("Vehicle Inventory", {
+                "registration_number": v.registration_number
+            })
+
+            if existing:
+                continue
             doc = frappe.get_doc({
                 "doctype": "Vehicle Inventory",
+
+                # Core Fields
                 "registration_number": v.registration_number,
                 "manufacturer": v.manufacturer,
                 "model": v.model,
-                "year": v.year,
+                "year_of_manufacture": v.year,
                 "fuel_type": v.fuel_type,
                 "transmission_type": v.transmission_type,
-                "odometer_reading": v.odometer_reading,
-                "status": "In Evaluation",
+                "odometerkm": v.odometer_reading,
+                "number_of_previous_owner": v.number_of_previous_owners,
+                "acquisition_cost": v.purchase_price,
                 "acquisition_reference": self.name,
-                "purchase_price": v.purchase_price
+                "status": "In Evaluation",
+                "condition_rating": v.condition_rating
             })
             doc.insert(ignore_permissions=True)
 
