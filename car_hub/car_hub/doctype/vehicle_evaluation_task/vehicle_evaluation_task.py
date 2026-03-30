@@ -62,3 +62,7 @@ class VehicleEvaluationTask(Document):
             "Poor": "Poor",
             "Not Worth Refurbishing": "Poor",
         }.get(verdict, "Fair")
+
+def get_permission_query_conditions(user):
+    if "Evaluator" in frappe.get_roles(user):
+        return f"`tabEvaluation Task`.assigned_to = '{user}'"

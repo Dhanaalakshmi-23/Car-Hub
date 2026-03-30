@@ -61,3 +61,6 @@ class ConsultingEngagement(Document):
         })
 
         revenue.insert(ignore_permissions=True)
+def get_permission_query_conditions(user):
+    if "Sales Consultant" in frappe.get_roles(user):
+        return f"`tabConsulting Engagement`.assigned_consultant = '{user}'"
