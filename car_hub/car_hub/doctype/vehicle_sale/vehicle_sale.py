@@ -20,6 +20,7 @@ class VehicleSale(Document):
         self.validate_discount()
         self.calculate_profit()
         self.check_discount_limit()
+
     def before_save(self):
         self.handle_discount_workflow()
     def before_submit(self):
@@ -39,6 +40,7 @@ class VehicleSale(Document):
         self.dealership_address = settings.address
         self.dealership_email = settings.system_email
         self.dealership_logo = settings.logo
+        self.warranty_statement = settings.warranty_days
 
     def fetch_vehicle_price(self):
         if self.vehicle and not self.selling_price:
@@ -65,22 +67,27 @@ class VehicleSale(Document):
             as_dict=True
         )
 
-        self.documentation_charges = self.documentation_charges or (settings.documentation_charges if settings else 0)
+        self.documentation_charges = float(self.documentation_charges or settings.documentation_charges or 0)
+        self.selling_price = float(self.selling_price or 0)
+        self.transfer_fee = float(self.transfer_fee or 0)
+        self.insurance_charges = float(self.insurance_charges or 0)
+        self.addons_total = float(self.addons_total or 0)
+        self.discount = float(self.discount or 0)
 
         self.subtotal = (
-            (self.selling_price or 0)
-            + (self.documentation_charges or 0)
-            + (self.transfer_fee or 0)
-            + (self.insurance_charges or 0)
-            + (self.addons_total or 0)
+            self.selling_price
+            + self.documentation_charges
+            + self.transfer_fee
+            + self.insurance_charges
+            + self.addons_total
         )
 
-        tax_percentage = settings.tax_percentage if settings else 0
+        tax_percentage = float(settings.tax_percentage or 0)
         self.tax_amount = (self.subtotal * tax_percentage) / 100
 
         self.grand_total = (
             self.subtotal
-            - (self.discount or 0)
+            - self.discount
             + self.tax_amount
         )
 
