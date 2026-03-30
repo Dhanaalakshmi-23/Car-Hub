@@ -9,7 +9,11 @@ app_license = "mit"
 required_apps = {"frappe": ">=15.0.0"}
 
 #after install default data setup
-after_install = "car_hub.install.after_install"
+after_install = {
+    "car_hub.install.after_install",
+    "car_hub.setup.roles.create_roles",
+    "car_hub.setup.permissions.set_permissions",
+}
 
 
 scheduler_events = {

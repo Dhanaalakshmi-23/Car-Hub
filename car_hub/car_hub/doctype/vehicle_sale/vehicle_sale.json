@@ -22,7 +22,7 @@
   "referrer",
   "vehicle",
   "sale_date",
-  "sales_consultant",
+  "assigned_consultant",
   "payment_mode",
   "status",
   "accessory_section_section",
@@ -106,12 +106,6 @@
    "fieldtype": "Date",
    "label": "Sale Date",
    "reqd": 1
-  },
-  {
-   "fieldname": "sales_consultant",
-   "fieldtype": "Link",
-   "label": "Sales Consultant",
-   "options": "User"
   },
   {
    "fieldname": "payment_mode",
@@ -243,13 +237,19 @@
    "fieldname": "dealership_image",
    "fieldtype": "Attach Image",
    "label": "Dealership Image"
+  },
+  {
+   "fieldname": "assigned_consultant",
+   "fieldtype": "Link",
+   "label": "Assigned Consultant",
+   "options": "User"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-28 20:42:15.310087",
+ "modified": "2026-03-30 17:18:50.165558",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Vehicle Sale",

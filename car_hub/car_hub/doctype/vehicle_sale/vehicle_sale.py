@@ -261,3 +261,6 @@ class VehicleSale(Document):
             "vehicle": self.vehicle,
             "profit": self.profit_margin
         }).insert(ignore_permissions=True)
+def get_permission_query_conditions(user):
+    if "Sales Consultant" in frappe.get_roles(user):
+        return f"`tabVehicle Sale`.assigned_consultant = '{user}'"
