@@ -21,7 +21,7 @@ class VehicleInventory(Document):
 
 	def after_insert(self):
 		# Trigger background job after first save
-		frappe.enqueue(
+		frappe.enqueue( # NOtification - 1
 			"car_hub.car_hub.doctype.vehicle_inventory.vehicle_inventory.notify_customers",
 			vehicle=self.name
 		)
