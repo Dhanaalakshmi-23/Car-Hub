@@ -5,6 +5,13 @@ app_description = "Second hand car dealership and consulting platform"
 app_email = "dhanaalakshminarayanan@gmail.com"
 app_license = "mit"
 
+#Module - 8 Version check
+required_apps = {"frappe": ">=15.0.0"}
+
+#after install default data setup
+after_install = "car_hub.install.after_install"
+
+
 doc_events = {
     "Vehicle Inventory": {
         "after_insert": "car_hub.car_hub.doctype.vehicle_inventory.vehicle_inventory.after_insert",
