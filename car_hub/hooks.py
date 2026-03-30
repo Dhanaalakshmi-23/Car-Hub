@@ -5,21 +5,32 @@ app_description = "Second hand car dealership and consulting platform"
 app_email = "dhanaalakshminarayanan@gmail.com"
 app_license = "mit"
 
-scheduler_events = {
-    "daily": [
-        "car_hub.workflow.vehicle_sale_workflow.py"
-    ]
+doc_events = {
+    "Vehicle Inventory": {
+        "after_insert": "car_hub.car_hub.doctype.vehicle_inventory.vehicle_inventory.after_insert",
+        "validate":     "car_hub.car_hub.doctype.vehicle_inventory.vehicle_inventory.validate",
+        "before_delete":"car_hub.car_hub.doctype.vehicle_inventory.vehicle_inventory.before_delete",
+    },
+    "Vehicle Sale": {
+        "validate":  "car_hub.car_hub.doctype.vehicle_sale.vehicle_sale.validate",
+        "on_submit": "car_hub.car_hub.doctype.vehicle_sale.vehicle_sale.on_submit",
+        "on_update": "car_hub.car_hub.doctype.vehicle_sale.vehicle_sale.on_update",
+        "on_cancel": "car_hub.car_hub.doctype.vehicle_sale.vehicle_sale.on_cancel",
+    },
+    "Vehicle Evaluation Task": {
+        "validate":  "car_hub.car_hub.doctype.vehicle_evaluation_task.vehicle_evaluation_task.validate",
+        "on_update": "car_hub.car_hub.doctype.vehicle_evaluation_task.vehicle_evaluation_task.on_update",
+    },
 }
 
-doc_events = {
-    "Vehicle Sale": {
-        "on_submit": "car_hub.notifications.vehicle_sale.on_submit",
-        "on_cancel": "car_hub.notifications.vehicle_sale.on_cancel",
-        "on_update": "car_hub.notifications.vehicle_sale.on_update"
-    },
-    "Vehicle Evaluation": {
-        "on_submit": "car_hub.notifications.vehicle_evaluation.on_submit"
-    }
+scheduler_events = {
+    "weekly": [
+        "car_hub.car_hub.utils.notifications.send_slow_inventory_report",
+    ],
+    "daily_long": [
+        "car_hub.car_hub.utils.notifications.auto_close_delivered_sales",   # 6 PM
+        "car_hub.car_hub.utils.notifications.log_overdue_evaluations",      # 9 AM
+    ],
 }
 
 # Apps

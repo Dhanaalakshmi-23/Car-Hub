@@ -1,6 +1,6 @@
 import frappe
 from datetime import datetime, timedelta
-from car_hub.utils.email import send_email
+from car_hub.utils.notifications import send_email
 
 def send_slow_inventory_report():
 

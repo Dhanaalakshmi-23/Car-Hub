@@ -3,6 +3,8 @@
 
 import frappe
 from frappe.model.document import Document
+from car_hub.utils.notifications import notify_sale_submitted,notify_documentation_in_progress, notify_vehicle_delivered,notify_sale_cancelled
+from frappe.utils.data import today
 
 
 class VehicleSale(Document):
@@ -22,6 +24,13 @@ class VehicleSale(Document):
         self.handle_discount_workflow()
     def before_submit(self):
         self.prevent_submit_without_approval()
+    def on_update(self):
+        if self.status == "Documentation In Progress":
+            notify_documentation_in_progress(self.name) # Notification 3
+        if self.status == "Delivered":
+            if not self.delivery_date:
+                self.db_set("delivery_date", today())
+            notify_vehicle_delivered(self.name) # Notification 4: Delivered → Email + System
 
     def fetch_dealership_details(self):
         settings = frappe.get_single("Dealership Settings")
@@ -175,6 +184,7 @@ class VehicleSale(Document):
         self.update_customer_history()
         self.handle_referral_bonus()
         self.log_profit()
+        notify_sale_submitted(self.name) #Notification-2
 
     def before_cancel(self):
         if not self.cancel_reason:
@@ -182,6 +192,8 @@ class VehicleSale(Document):
 
     def on_cancel(self):
         self.update_vehicle_status("Available for Sale")
+        notify_sale_cancelled(self.name)
+
         # self.revert_customer_history()
 
     def update_vehicle_status(self, status):
