@@ -1,83 +1,91 @@
 {
  "actions": [],
- "allow_rename": 1,
  "autoname": "field:registration_number",
- "creation": "2026-03-24 10:10:13.918076",
+ "creation": "2026-03-30 13:02:27.656649",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "basic_informations_section",
+  "sec_identity",
   "registration_number",
   "manufacturer",
   "model",
   "vehicle_classification",
-  "vehicle_identity_section",
-  "vin_number",
-  "engine_number",
-  "chassis_number",
-  "registration_details_section",
-  "rto_location",
-  "registration_date",
-  "rc_status",
-  "manufacturing_information_section",
+  "col_break_1",
   "year_of_manufacture",
   "color",
   "fuel_type",
   "transmission_type",
-  "odometerkm",
-  "ownership_and_insurrance_section",
-  "number_of_previous_owner",
+  "sec_specs",
+  "odometer_reading",
+  "number_of_previous_owners",
   "insurance_validity_date",
-  "acquisition_details_section",
+  "col_break_2",
+  "condition_rating",
+  "status",
+  "vehicle_history_remarks",
+  "sec_acquisition",
+  "vehicle_acquisition",
   "acquired_from",
   "acquisition_date",
+  "col_break_3",
   "acquisition_cost",
-  "acquisition_reference",
-  "investment_section",
   "refurbishment_cost",
   "total_investment",
-  "pricing_section",
+  "sec_pricing",
   "expected_selling_price",
-  "minimum_price",
-  "section_break_bxee",
-  "status",
-  "condition_rating",
-  "remarks",
-  "vehicle_images"
+  "minimum_acceptable_price",
+  "col_break_4",
+  "profit_margin_amount"
  ],
  "fields": [
   {
+   "fieldname": "sec_identity",
+   "fieldtype": "Section Break",
+   "label": "Vehicle Identity"
+  },
+  {
+   "bold": 1,
    "fieldname": "registration_number",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Registration Number",
+   "reqd": 1,
    "unique": 1
   },
   {
    "fieldname": "manufacturer",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Manufacturer",
-   "options": "Manufacturer"
+   "options": "Manufacturer",
+   "reqd": 1,
+   "search_index": 1
   },
   {
    "fieldname": "model",
    "fieldtype": "Data",
-   "label": "Model"
+   "in_list_view": 1,
+   "label": "Model",
+   "reqd": 1
   },
   {
+   "description": "Select only leaf-level classification (not a group)",
    "fieldname": "vehicle_classification",
    "fieldtype": "Link",
    "label": "Vehicle Classification",
-   "options": "Vehicle Classification"
+   "options": "Vehicle Classification",
+   "reqd": 1
   },
   {
-   "fieldname": "manufacturing_information_section",
-   "fieldtype": "Section Break",
-   "label": "Specifications"
+   "fieldname": "col_break_1",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "year_of_manufacture",
    "fieldtype": "Int",
-   "label": "Year of Manufacture"
+   "label": "Year of Manufacture",
+   "reqd": 1
   },
   {
    "fieldname": "color",
@@ -87,24 +95,32 @@
   {
    "fieldname": "fuel_type",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Fuel Type",
-   "options": "Petrol\nDiesel\nCNG\nElectric\nHybrid"
+   "options": "\nPetrol\nDiesel\nCNG\nElectric\nHybrid",
+   "reqd": 1
   },
   {
    "fieldname": "transmission_type",
    "fieldtype": "Select",
    "label": "Transmission Type",
-   "options": "Manual\nAutomatic\nCVT"
+   "options": "\nManual\nAutomatic\nCVT",
+   "reqd": 1
   },
   {
-   "fieldname": "basic_informations_section",
+   "fieldname": "sec_specs",
    "fieldtype": "Section Break",
-   "label": "Basic Informations"
+   "label": "Specifications"
   },
   {
-   "fieldname": "number_of_previous_owner",
+   "fieldname": "odometer_reading",
    "fieldtype": "Int",
-   "label": "Number of Previous Owner"
+   "label": "Odometer Reading (km)"
+  },
+  {
+   "fieldname": "number_of_previous_owners",
+   "fieldtype": "Int",
+   "label": "No. of Previous Owners"
   },
   {
    "fieldname": "insurance_validity_date",
@@ -112,172 +128,174 @@
    "label": "Insurance Validity Date"
   },
   {
-   "fieldname": "acquisition_details_section",
+   "fieldname": "col_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Set automatically when Vehicle Evaluation Task is completed",
+   "fieldname": "condition_rating",
+   "fieldtype": "Select",
+   "label": "Condition Rating",
+   "options": "\nExcellent\nGood\nFair\nPoor"
+  },
+  {
+   "default": "In Evaluation",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "In Evaluation\nUnder Refurbishment\nAvailable for Sale\nReserved\nSold\nWritten Off",
+   "reqd": 1
+  },
+  {
+   "description": "Accident history, flood damage, repainted panels, etc.",
+   "fieldname": "vehicle_history_remarks",
+   "fieldtype": "Long Text",
+   "label": "Vehicle History Remarks"
+  },
+  {
+   "fieldname": "sec_acquisition",
    "fieldtype": "Section Break",
    "label": "Acquisition Details"
   },
   {
+   "description": "Auto-linked when created from Vehicle Acquisition submit",
+   "fieldname": "vehicle_acquisition",
+   "fieldtype": "Link",
+   "label": "Vehicle Acquisition Ref",
+   "options": "Vehicle Acquisition",
+   "read_only": 1
+  },
+  {
    "fieldname": "acquired_from",
    "fieldtype": "Link",
-   "label": "Acquired From",
-   "options": "Seller Registry"
+   "label": "Acquired From (Seller)",
+   "options": "Seller Registry",
+   "read_only": 1
   },
   {
    "fieldname": "acquisition_date",
    "fieldtype": "Date",
-   "label": "Acquisition Date"
+   "label": "Acquisition Date",
+   "read_only": 1
   },
   {
+   "fieldname": "col_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Visible only to Sales Manager, Acquisition Manager, Admin",
    "fieldname": "acquisition_cost",
    "fieldtype": "Currency",
-   "label": "Acquisition Cost"
+   "label": "Acquisition Cost",
+   "permlevel": 1,
+   "read_only": 1,
+   "reqd": 1
   },
   {
-   "fieldname": "odometerkm",
-   "fieldtype": "Float",
-   "label": "Odometer(KM)"
-  },
-  {
-   "fieldname": "ownership_and_insurrance_section",
-   "fieldtype": "Section Break",
-   "label": "Ownership and Insurrance"
-  },
-  {
-   "fieldname": "investment_section",
-   "fieldtype": "Section Break",
-   "label": "Investment"
-  },
-  {
+   "default": "0",
+   "description": "Updated as repair/refurbishment work is done",
    "fieldname": "refurbishment_cost",
    "fieldtype": "Currency",
    "label": "Refurbishment Cost"
   },
   {
+   "description": "Auto-calculated: Acquisition Cost + Refurbishment Cost",
    "fieldname": "total_investment",
    "fieldtype": "Currency",
    "label": "Total Investment",
+   "permlevel": 1,
    "read_only": 1
   },
   {
-   "fieldname": "pricing_section",
+   "fieldname": "sec_pricing",
    "fieldtype": "Section Break",
    "label": "Pricing"
   },
   {
+   "description": "Filled after evaluation. System validates against minimum profit margin.",
    "fieldname": "expected_selling_price",
    "fieldtype": "Currency",
    "label": "Expected Selling Price"
   },
   {
-   "fieldname": "minimum_price",
+   "fieldname": "minimum_acceptable_price",
    "fieldtype": "Currency",
-   "label": "Minimum Price"
+   "label": "Minimum Acceptable Price"
   },
   {
-   "fieldname": "section_break_bxee",
-   "fieldtype": "Section Break",
-   "label": "Status and Condition"
+   "fieldname": "col_break_4",
+   "fieldtype": "Column Break"
   },
   {
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "In Evaluation\nUnder Refurbishment\nAvailable for Sale\nReserved\nSold\nWritten Off"
-  },
-  {
-   "depends_on": "eval:doc.status!='In Evaluation'",
-   "fieldname": "condition_rating",
-   "fieldtype": "Select",
-   "label": "Condition Rating",
-   "options": "Excellent\nGood\nFair\nPoor"
-  },
-  {
-   "fieldname": "remarks",
-   "fieldtype": "Small Text",
-   "label": "Remarks"
-  },
-  {
-   "fieldname": "vehicle_identity_section",
-   "fieldtype": "Section Break",
-   "hidden": 1,
-   "label": "Vehicle Identity"
-  },
-  {
-   "fieldname": "vin_number",
-   "fieldtype": "Data",
-   "label": "VIN Number",
-   "unique": 1
-  },
-  {
-   "fieldname": "engine_number",
-   "fieldtype": "Data",
-   "label": "Engine Number"
-  },
-  {
-   "fieldname": "chassis_number",
-   "fieldtype": "Data",
-   "label": "Chassis Number"
-  },
-  {
-   "fieldname": "registration_details_section",
-   "fieldtype": "Section Break",
-   "hidden": 1,
-   "label": "Registration Details"
-  },
-  {
-   "fieldname": "rto_location",
-   "fieldtype": "Date",
-   "label": "RTO Location"
-  },
-  {
-   "fieldname": "registration_date",
-   "fieldtype": "Date",
-   "label": "Registration Date"
-  },
-  {
-   "fieldname": "rc_status",
-   "fieldtype": "Select",
-   "label": "RC Status",
-   "options": "Active\nExpired\nPending Transfer\nTransferred"
-  },
-  {
-   "fieldname": "vehicle_images",
-   "fieldtype": "Attach",
-   "label": "Vehicle Images"
-  },
-  {
-   "fieldname": "acquisition_reference",
-   "fieldtype": "Link",
-   "label": "Acquisition Reference",
-   "options": "Vehicle Acquisition"
+   "description": "Auto-calculated: Expected Selling Price \u2212 Total Investment",
+   "fieldname": "profit_margin_amount",
+   "fieldtype": "Currency",
+   "label": "Profit Margin",
+   "permlevel": 1,
+   "read_only": 1
   }
  ],
- "grid_page_length": 50,
- "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-27 17:14:36.126238",
+ "modified": "2026-03-30 13:04:51.955522",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Vehicle Inventory",
- "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
    "create": 1,
    "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
    "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
+   "role": "Dealership Admin",
+   "write": 1
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "Dealership Admin",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Sales Manager",
+   "write": 1
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "Sales Manager",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "role": "Acquisition Manager",
+   "write": 1
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "Acquisition Manager",
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Sales Consultant"
+  },
+  {
+   "read": 1,
+   "role": "Evaluator",
    "write": 1
   }
  ],
  "row_format": "Dynamic",
- "rows_threshold_for_grid_search": 20,
+ "search_fields": "registration_number,manufacturer,model,status",
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "registration_number",
+ "track_changes": 1
 }
