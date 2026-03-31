@@ -57,7 +57,7 @@ class VehicleSale(Document):
             row.total_amount = (row.quantity or 0) * (row.unit_price or 0)
             total += row.total_amount
 
-        self.addons_total = total
+        self.accessories_total = total
 
     def calculate_totals(self):
         settings = frappe.db.get_value(
@@ -71,7 +71,7 @@ class VehicleSale(Document):
         self.selling_price = float(self.selling_price or 0)
         self.transfer_fee = float(self.transfer_fee or 0)
         self.insurance_charges = float(self.insurance_charges or 0)
-        self.addons_total = float(self.addons_total or 0)
+        self.accessories_total = float(self.accessories_total or 0)
         self.discount = float(self.discount or 0)
 
         self.subtotal = (
@@ -79,7 +79,7 @@ class VehicleSale(Document):
             + self.documentation_charges
             + self.transfer_fee
             + self.insurance_charges
-            + self.addons_total
+            + self.accessories_total
         )
 
         tax_percentage = float(settings.tax_percentage or 0)
@@ -114,7 +114,7 @@ class VehicleSale(Document):
 
         min_profit = frappe.db.get_single_value(
             "Dealership Settings",
-            "minimum_profit"
+            "minimum_profit_margin"
         ) or 0
 
         if self.profit_margin < min_profit:

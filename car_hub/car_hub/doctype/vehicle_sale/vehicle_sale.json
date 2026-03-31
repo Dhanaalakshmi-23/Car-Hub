@@ -77,7 +77,7 @@
   {
    "fetch_from": "customer.phone_number",
    "fieldname": "phone_number",
-   "fieldtype": "Phone",
+   "fieldtype": "Data",
    "label": "Phone Number"
   },
   {
@@ -115,10 +115,12 @@
    "reqd": 1
   },
   {
+   "default": "Draft",
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Workflow"
+   "options": "Draft\nPending Discount Approval\nSubmitted\nConsultant Review\nManager Approval\nDocumentation In Progress\nPayment Pending\nPayment Received\nDelivered\nClosed\nCancelled",
+   "read_only": 1
   },
   {
    "fieldname": "pricing_section_section",
@@ -164,7 +166,8 @@
    "description": "Should not exceed max discount from settings",
    "fieldname": "discount",
    "fieldtype": "Currency",
-   "label": "Discount"
+   "label": "Discount",
+   "permlevel": 1
   },
   {
    "fieldname": "tax_amount",
@@ -249,7 +252,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-30 17:18:50.165558",
+ "modified": "2026-03-31 16:13:52.407120",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Vehicle Sale",

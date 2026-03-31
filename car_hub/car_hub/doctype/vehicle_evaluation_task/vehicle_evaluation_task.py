@@ -17,8 +17,8 @@ class VehicleEvaluationTask(Document):
             if "Evaluator" in roles and "Sales Manager" not in roles and "Dealership Admin" not in roles:
                 if self.evaluator != frappe.session.user:
                     frappe.throw("You can only edit Evaluation Tasks assigned to you.")
-        if self.status == "Completed" and not self.overall_condition_verdict:
-            frappe.throw("Please set the Overall Condition Verdict before marking as Completed.")
+        if self.status == "Completed" and not self.overall_condition:
+            frappe.throw("Please set the Overall Condition before marking as Completed.")
 
 
     def validate_links(self):
@@ -42,15 +42,15 @@ class VehicleEvaluationTask(Document):
         if not self.vehicle_inventory:
             return
         inv = frappe.get_doc("Vehicle Inventory", self.vehicle_inventory)
-        inv.condition_rating = self.map_verdict(self.overall_condition_verdict)
-        inv.refurbishment_cost = self.estimated_refurbishment_cost
-        inv.expected_selling_price = self.recommended_selling_price
+        inv.condition_rating = self.map_verdict(self.overall_condition)
+        inv.refurbishment_cost = self.refurbishment_cost
+        inv.expected_selling_price = self.recommended_price
         inv.status = (
             "Written Off"
-            if self.overall_condition_verdict == "Not Worth Refurbishing"
+            if self.overall_condition == "Not Worth Refurbishing"
             else "Available for Sale"
         )
-        notes = f"\n[Evaluation {self.name} on {self.evaluation_date}]: {self.evaluator_notes or ''}"
+        notes = f"\n[Evaluation {self.name} on {self.evaluation_duration}]: {self.notes or ''}"
         inv.vehicle_history_remarks = (inv.vehicle_history_remarks or "") + notes
         inv.save(ignore_permissions=True)
 

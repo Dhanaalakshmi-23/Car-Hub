@@ -5,6 +5,15 @@ frappe.ui.form.on('Customer Registry', {
 
     refresh: function(frm) {
         toggle_fields(frm);
+
+        if (!frm.is_new()) {
+            frm.add_custom_button("Purchase History", function() {
+                frappe.set_route("query-report", "Customer Purchase History", {
+                    customer: frm.doc.name
+                });
+            });
+        }
+    
     },
 
     customer_type: function(frm) {

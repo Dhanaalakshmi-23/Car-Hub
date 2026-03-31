@@ -190,7 +190,7 @@ def notify_evaluation_completed(task_name):
     """Called from vehicle_evaluation_task.py → on_update when status == 'Completed'"""
     task = frappe.get_doc("Vehicle Evaluation Task", task_name)
     vehicle = task.vehicle_inventory or "Unknown Vehicle"
-    verdict = task.overall_condition_verdict or "N/A"
+    verdict = task.overall_condition or "N/A"
 
     managers = frappe.get_all(
         "Has Role",

@@ -137,19 +137,18 @@ class VehicleAcquisition(Document):
 
                 # Core Fields
                 "registration_number": v.registration_number,
-                "manufacturer": v.manufacturer,
+                "manufacturer": v.manufacturer or "m7blh4csdi",
                 "model": v.model,
                 "year_of_manufacture": v.year,
                 "fuel_type": v.fuel_type,
                 "transmission_type": v.transmission_type,
                 "odometerkm": v.odometer_reading,
                 "number_of_previous_owner": v.number_of_previous_owners,
-                "acquisition_cost": v.purchase_price,
+                "acquisition_cost": v.total_purchase_cost,
                 "acquisition_reference": self.name,
                 "status": "In Evaluation",
-                "condition_rating": v.condition_rating
             })
-            doc.insert(ignore_permissions=True)
+            doc.insert(ignore_permissions=True, ignore_mandatory=True)
 
     def update_seller_history(self):
         seller = frappe.get_doc("Seller Registry", self.seller)
@@ -159,8 +158,7 @@ class VehicleAcquisition(Document):
                 "vehicle": v.registration_number,
                 "acquisition": self.name,
                 "date": self.acquisition_date,
-                "price": v.purchase_price,
-                "status": "Active"
+                "price": v.total_purchase_cost,
             })
 
         seller.save(ignore_permissions=True)

@@ -1,0 +1,52 @@
+{
+ "add_total_row": 0,
+ "add_translate_data": 0,
+ "columns": [],
+ "creation": "2026-03-31 21:27:51.329622",
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": null,
+ "modified": "2026-03-31 21:27:51.329622",
+ "modified_by": "Administrator",
+ "module": "Car Hub",
+ "name": "Inventory Aging Report",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Vehicle Inventory",
+ "report_name": "Inventory Aging Report",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "Sales Consultant"
+  },
+  {
+   "role": "Acquisition Manager"
+  },
+  {
+   "role": "Evaluator"
+  },
+  {
+   "role": "Dealership Admin"
+  },
+  {
+   "role": "Sales Consultant"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "Acquisition Manager"
+  },
+  {
+   "role": "Evaluator"
+  },
+  {
+   "role": "Dealership Admin"
+  }
+ ],
+ "timeout": 0
+}

@@ -8,6 +8,71 @@ app_license = "mit"
 #Module - 8 Version check
 required_apps = {"frappe": ">=15.0.0"}
 
+fixtures = [
+
+    # Roles
+    {
+        "doctype": "Role", 
+        "filters": [["name", "in", [
+        "Sales Consultant",
+        "Sales Manager",
+        "Acquisition Manager",
+        "Evaluator"
+    ]]]
+    },
+
+    # Customizations
+    {
+        "doctype": "Custom Field", 
+        "filters": [["module", "=", "Car Hub"]]
+    },
+    {
+        "doctype": "Property Setter", 
+        "filters": [["module", "=", "Car Hub"]]
+        },
+
+    # Workflows
+    {
+        "doctype": "Workflow"
+        },
+    {
+        "doctype": "Workflow State"
+        },
+    {
+        "doctype": "Workflow Action Master"
+        },
+
+    # Print Formats
+    {
+        "doctype": "Print Format", 
+        "filters": [["module", "=", "Car Hub"]]
+        },
+
+    # Reports
+    {
+        "doctype": "Report", "filters": [["module", "=", "Car Hub"]]
+    },
+
+    # Dashboard
+    {
+        "doctype": "Workspace", 
+        "filters": [["module", "=", "Car Hub"]]
+        },
+    {
+        "doctype": "Dashboard Chart", 
+        "filters": [["module", "=", "Car Hub"]]
+        },
+    {
+        "doctype": "Number Card", 
+        "filters": [["module", "=", "Car Hub"]]
+        },
+
+    # Settings
+    {
+        "doctype": "Dealership Settings"
+        },
+]
+
 #after install default data setup
 after_install = {
     "car_hub.install.after_install",
