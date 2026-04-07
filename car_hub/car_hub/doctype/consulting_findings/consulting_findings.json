@@ -1,49 +1,29 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2026-03-26 11:44:02.281347",
+ "creation": "2026-04-02 12:00:00.000000",
  "doctype": "DocType",
- "editable_grid": 1,
  "engine": "InnoDB",
- "field_order": [
-  "area_of_inspection",
-  "observation",
-  "risk_level",
-  "recommendation"
- ],
+ "field_order": ["area_of_inspection","observation","risk_level","recommendation"],
  "fields": [
-  {
-   "fieldname": "area_of_inspection",
-   "fieldtype": "Data",
-   "label": "Area of Inspection"
-  },
-  {
-   "fieldname": "observation",
-   "fieldtype": "Small Text",
-   "label": "Observation"
-  },
-  {
-   "fieldname": "risk_level",
-   "fieldtype": "Select",
-   "label": "Risk Level",
-   "options": "Low\nMedium\nHigh"
-  },
-  {
-   "fieldname": "recommendation",
-   "fieldtype": "Small Text",
-   "label": "Recommendation"
-  }
+  {"fieldname": "area_of_inspection","fieldtype": "Data","label": "Area of Inspection"},
+  {"fieldname": "observation","fieldtype": "Small Text","label": "Observation"},
+  {"fieldname": "risk_level","fieldtype": "Select","label": "Risk Level","options": "Low\nMedium\nHigh"},
+  {"fieldname": "recommendation","fieldtype": "Small Text","label": "Recommendation"}
  ],
  "grid_page_length": 50,
- "index_web_pages_for_search": 1,
+ "editable_grid": 1,
  "istable": 1,
+ "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-26 11:45:31.400777",
+ "modified": "2026-04-02 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Consulting Findings",
  "owner": "Administrator",
- "permissions": [],
+ "permissions": [
+  {"role":"System Manager","create":1,"read":1,"write":1,"delete":1,"submit":1,"print":1,"export":1,"email":1,"report":1,"share":1}
+ ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
  "sort_field": "creation",

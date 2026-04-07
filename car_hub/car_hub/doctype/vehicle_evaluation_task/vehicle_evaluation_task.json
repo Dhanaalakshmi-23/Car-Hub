@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2026-03-30 15:00:00.000000",
+ "creation": "2026-03-30 15:00:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -12,28 +12,24 @@
   "status",
   "priority",
   "due_date",
-
   "tracking_section",
   "assigned_on",
   "started_on",
   "completed_on",
   "evaluation_duration",
-
   "evaluation_section",
   "overall_condition",
   "refurbishment_cost",
   "recommended_price",
   "expected_profit",
-
   "checklist_section",
   "evaluation_checklist",
-
   "notes_section",
   "notes",
   "internal_remarks",
-
   "system_section",
-  "auto_created"
+  "auto_created",
+  "amended_from"
  ],
  "fields": [
   {
@@ -44,51 +40,50 @@
   {
    "fieldname": "vehicle_acquisition",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Vehicle Acquisition",
    "options": "Vehicle Acquisition",
-   "reqd": 1,
    "read_only": 1,
-   "in_list_view": 1
+   "reqd": 1
   },
   {
    "fieldname": "vehicle_inventory",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Vehicle",
    "options": "Vehicle Inventory",
-   "reqd": 1,
    "read_only": 1,
-   "in_list_view": 1
+   "reqd": 1
   },
   {
    "fieldname": "evaluator",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Evaluator",
    "options": "User",
-   "reqd": 1,
-   "in_list_view": 1
+   "reqd": 1
   },
   {
+   "default": "Pending",
    "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Status",
-   "options": "Pending\nIn Progress\nCompleted",
-   "default": "Pending",
-   "in_list_view": 1
+   "options": "Pending\nIn Progress\nCompleted\nOverdue"
   },
   {
+   "default": "Medium",
    "fieldname": "priority",
    "fieldtype": "Select",
    "label": "Priority",
-   "options": "Low\nMedium\nHigh",
-   "default": "Medium"
+   "options": "Low\nMedium\nHigh"
   },
   {
    "fieldname": "due_date",
    "fieldtype": "Date",
-   "label": "Due Date",
-   "in_list_view": 1
+   "in_list_view": 1,
+   "label": "Due Date"
   },
-
   {
    "fieldname": "tracking_section",
    "fieldtype": "Section Break",
@@ -116,7 +111,6 @@
    "label": "Evaluation Duration (hrs)",
    "read_only": 1
   },
-
   {
    "fieldname": "evaluation_section",
    "fieldtype": "Section Break",
@@ -144,7 +138,6 @@
    "label": "Expected Profit",
    "read_only": 1
   },
-
   {
    "fieldname": "checklist_section",
    "fieldtype": "Section Break",
@@ -156,7 +149,6 @@
    "label": "Evaluation Checklist",
    "options": "Evaluation Checklist"
   },
-
   {
    "fieldname": "notes_section",
    "fieldtype": "Section Break",
@@ -172,40 +164,50 @@
    "fieldtype": "Small Text",
    "label": "Internal Remarks"
   },
-
   {
    "fieldname": "system_section",
    "fieldtype": "Section Break",
    "label": "System"
   },
   {
+   "default": "1",
    "fieldname": "auto_created",
    "fieldtype": "Check",
    "label": "Created Automatically",
-   "default": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Vehicle Evaluation Task",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2026-03-30 15:00:00.000000",
+ "modified": "2026-04-05 19:29:07.585728",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Vehicle Evaluation Task",
  "owner": "Administrator",
  "permissions": [
   {
-   "role": "System Manager",
-   "read": 1,
-   "write": 1,
    "create": 1,
    "delete": 1,
-   "print": 1,
    "email": 1,
-   "report": 1,
    "export": 1,
-   "share": 1
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
   }
  ],
  "row_format": "Dynamic",

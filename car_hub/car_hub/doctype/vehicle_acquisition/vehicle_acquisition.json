@@ -12,17 +12,21 @@
   "seller_name",
   "phone_number",
   "seller_type",
+  "column_break_ymtk",
   "acquisition_date",
-  "evaluator",
   "status",
+  "vehicle_section_section",
   "vehicles",
   "financial_fields_section",
   "total_purchase_cost",
+  "transportation_required",
+  "transportation_km",
   "transportation_charges",
+  "cost_per_km",
+  "column_break_kvqv",
   "documentation_fees",
   "advance_paid",
-  "tax_percentage",
-  "tax_amount",
+  "section_break_gjhj",
   "grand_total",
   "cancellation_reason"
  ],
@@ -66,7 +70,7 @@
   {
    "fetch_from": "seller.phone_number",
    "fieldname": "phone_number",
-   "fieldtype": "Phone",
+   "fieldtype": "Data",
    "label": "Phone Number",
    "read_only": 1
   },
@@ -86,16 +90,10 @@
    "read_only": 1
   },
   {
-   "fieldname": "evaluator",
-   "fieldtype": "Link",
-   "label": "Evaluator",
-   "options": "User"
-  },
-  {
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Draft\nPending Approval\nApproved\nFinalized\nCancelled\nAmended",
+   "options": "Draft\nPending Approval\nApproved\nFinalized\nCancelled\nAmended\nRejected",
    "read_only": 1
   },
   {
@@ -110,11 +108,6 @@
    "read_only": 1
   },
   {
-   "fieldname": "transportation_charges",
-   "fieldtype": "Currency",
-   "label": "Transportation Charges"
-  },
-  {
    "fieldname": "documentation_fees",
    "fieldtype": "Currency",
    "label": "Documentation Fees"
@@ -122,20 +115,11 @@
   {
    "fieldname": "advance_paid",
    "fieldtype": "Currency",
+   "hidden": 1,
    "label": "Advance Paid"
   },
   {
-   "fieldname": "tax_percentage",
-   "fieldtype": "Float",
-   "label": "Tax Percentage"
-  },
-  {
-   "fieldname": "tax_amount",
-   "fieldtype": "Currency",
-   "label": "Tax Amount",
-   "read_only": 1
-  },
-  {
+   "allow_on_submit": 1,
    "fieldname": "grand_total",
    "fieldtype": "Currency",
    "label": "Grand Total",
@@ -148,9 +132,54 @@
    "options": "Vehicle Acquisition Item"
   },
   {
-   "depends_on": "eval:doc.status==\"Cancelled\";",
+   "fieldname": "column_break_ymtk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "vehicle_section_section",
+   "fieldtype": "Section Break",
+   "label": "Vehicle Section"
+  },
+  {
+   "fieldname": "column_break_kvqv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_gjhj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "transportation_required",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Transportation Required"
+  },
+  {
+   "depends_on": "eval:doc.transportation_required==1;",
+   "fieldname": "transportation_km",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "label": "Transportation Distance (km)",
+   "mandatory_depends_on": "eval:doc.transportation_required==1;"
+  },
+  {
+   "fieldname": "transportation_charges",
+   "fieldtype": "Currency",
+   "label": "Transportation Charges"
+  },
+  {
+   "default": "20",
+   "fieldname": "cost_per_km",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "label": "Cost Per km",
+   "read_only": 1
+  },
+  {
    "fieldname": "cancellation_reason",
    "fieldtype": "Small Text",
+   "hidden": 1,
    "label": "Cancellation Reason"
   }
  ],
@@ -158,7 +187,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-25 15:16:58.069277",
+ "modified": "2026-04-06 16:35:07.419812",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Vehicle Acquisition",
@@ -182,5 +211,6 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "seller_name"
 }

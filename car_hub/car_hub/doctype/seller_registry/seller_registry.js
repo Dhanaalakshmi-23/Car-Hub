@@ -3,13 +3,16 @@
 
 frappe.ui.form.on('Seller Registry', {
 
-    phone_number: function(frm) {
-        if (frm.doc.phone_number && !/^[0-9]{10}$/.test(frm.doc.phone_number)) {
-            frappe.msgprint("Phone number must be 10 digits");
-            frm.set_value("phone_number", "");
-        }
-    },
+    // phone_number: function(frm) {
+    //     if (frm.doc.phone_number && !/^[0-9]{10}$/.test(frm.doc.phone_number)) {
+    //         frappe.msgprint("Phone number must be 10 digits");
+    //         frm.set_value("phone_number", "");
+    //     }
+    // },
 
+    refresh: function(frm) {
+        frappe.msgprint("Seller Name : " + frm.doc.seller_name);
+    },
     email_address: function(frm) {
         if (frm.doc.email_address && !/^[^@]+@[^@]+\.[^@]+$/.test(frm.doc.email_address)) {
             frappe.msgprint("Invalid Email Address");

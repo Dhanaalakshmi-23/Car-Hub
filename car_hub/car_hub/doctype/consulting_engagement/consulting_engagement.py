@@ -25,7 +25,7 @@ class ConsultingEngagement(Document):
     def fetch_customer_details(self):
         if self.customer:
             self.customer_name = frappe.db.get_value(
-                "Customer", self.customer, "customer_name"
+                "Customer Registry", self.customer, "customer_name"
             )
 
     def validate_dates(self):
