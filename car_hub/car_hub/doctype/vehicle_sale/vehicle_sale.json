@@ -20,11 +20,11 @@
   "phone_number",
   "email_address",
   "referrer",
+  "column_break_cpyw",
   "vehicle",
   "sale_date",
   "assigned_consultant",
   "payment_mode",
-  "status",
   "accessory_section_section",
   "accessories",
   "pricing_section_section",
@@ -32,9 +32,11 @@
   "documentation_charges",
   "transfer_fee",
   "insurance_charges",
+  "column_break_ruhp",
   "accessories_total",
   "subtotal",
-  "discount",
+  "discount_percentage",
+  "section_break_ehkl",
   "tax_amount",
   "grand_total",
   "profit_margin"
@@ -58,7 +60,8 @@
   {
    "fieldname": "sale_number",
    "fieldtype": "Data",
-   "label": "Sale Number"
+   "label": "Sale Number",
+   "read_only": 1
   },
   {
    "fieldname": "customer",
@@ -115,14 +118,6 @@
    "reqd": 1
   },
   {
-   "default": "Draft",
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "Draft\nPending Discount Approval\nSubmitted\nConsultant Review\nManager Approval\nDocumentation In Progress\nPayment Pending\nPayment Received\nDelivered\nClosed\nCancelled",
-   "read_only": 1
-  },
-  {
    "fieldname": "pricing_section_section",
    "fieldtype": "Section Break",
    "label": "Pricing Section"
@@ -160,14 +155,6 @@
    "fieldtype": "Currency",
    "label": "Subtotal",
    "read_only": 1
-  },
-  {
-   "default": "0",
-   "description": "Should not exceed max discount from settings",
-   "fieldname": "discount",
-   "fieldtype": "Currency",
-   "label": "Discount",
-   "permlevel": 1
   },
   {
    "fieldname": "tax_amount",
@@ -227,7 +214,7 @@
   },
   {
    "fieldname": "dealership_phone",
-   "fieldtype": "Phone",
+   "fieldtype": "Data",
    "label": "Dealership Phone"
   },
   {
@@ -246,13 +233,33 @@
    "fieldtype": "Link",
    "label": "Assigned Consultant",
    "options": "User"
+  },
+  {
+   "default": "0",
+   "description": "Should not exceed max discount from settings",
+   "fieldname": "discount_percentage",
+   "fieldtype": "Currency",
+   "label": "Discount Percentage",
+   "permlevel": 1
+  },
+  {
+   "fieldname": "column_break_cpyw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ruhp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_ehkl",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-31 16:13:52.407120",
+ "modified": "2026-04-02 15:02:08.705003",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Vehicle Sale",

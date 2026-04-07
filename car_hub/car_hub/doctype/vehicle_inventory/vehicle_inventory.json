@@ -59,19 +59,21 @@
    "in_list_view": 1,
    "label": "Manufacturer",
    "options": "Manufacturer",
-   "search_index": 1
+   "read_only": 1
   },
   {
    "fieldname": "model",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Model"
+   "label": "Model",
+   "read_only": 1
   },
   {
    "fieldname": "vehicle_classification",
    "fieldtype": "Link",
    "label": "Vehicle Classification",
-   "options": "Vehicle Classification"
+   "options": "Vehicle Classification",
+   "read_only": 1
   },
   {
    "fieldname": "col_break_1",
@@ -224,7 +226,7 @@
   }
  ],
  "links": [],
- "modified": "2026-03-31 12:41:07.334300",
+ "modified": "2026-04-01 17:56:45.637586",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Vehicle Inventory",

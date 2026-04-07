@@ -28,6 +28,7 @@
   "financial_section_section",
   "consulting_fee",
   "tax_percentage",
+  "tax_amount",
   "total_amount"
  ],
  "fields": [
@@ -55,7 +56,7 @@
   {
    "fetch_from": "customer.phone_number",
    "fieldname": "phone_number",
-   "fieldtype": "Data",
+   "fieldtype": "Phone",
    "label": "Phone Number"
   },
   {
@@ -164,18 +165,21 @@
    "label": "Tax Percentage"
   },
   {
-   "default": "0",
+   "fieldname": "tax_amount",
+   "fieldtype": "Currency",
+   "label": "Tax Amount"
+  },
+  {
    "fieldname": "total_amount",
    "fieldtype": "Currency",
-   "label": "Total Amount",
-   "read_only": 1
+   "label": "Total Amount"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-31 21:06:27.220378",
+ "modified": "2026-03-26 12:12:10.705109",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Consulting Engagement",

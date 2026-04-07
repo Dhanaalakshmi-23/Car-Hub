@@ -1,6 +1,8 @@
 # Copyright (c) 2026, Dhanaa Lakshmi and contributors
 # For license information, please see license.txt
 
+from pydoc import doc
+
 import frappe
 from frappe.model.document import Document
 from datetime import datetime
@@ -13,10 +15,10 @@ class VehicleAcquisition(Document):
         self.name = f"VA-{date_part}-{frappe.generate_hash(length=4)}"
 
     def before_insert(self):
-        self.assign_evaluator()
-
         if self.amended_from:
             self.status = "Amended"
+        else:
+            self.status = "Draft"
 
     def validate(self):
         self.validate_seller()
@@ -24,23 +26,28 @@ class VehicleAcquisition(Document):
         self.calculate_totals()
 
     def on_submit(self):
+        self.status = "Finalized"
         self.create_vehicle_inventory()
+        frappe.db.commit()
         self.update_seller_history()
         self.create_evaluation_tasks()
 
     def on_cancel(self):
-        if not self.cancellation_reason:
-            frappe.throw("Cancellation reason is required")
-
+        self.status = "Cancelled"
         self.update_inventory_status_cancel()
         self.update_seller_history_cancel()
 
+        
     def validate_seller(self):
         if not self.seller:
             frappe.throw("Seller is required")
 
-        seller = frappe.get_doc("Seller Registry", self.seller)
-
+        seller = frappe.db.get_value(
+            "Seller Registry",
+            self.seller,
+            ["seller_name", "phone_number", "seller_type", "is_blacklisted"],
+            as_dict=True
+        )
         if seller.is_blacklisted:
             frappe.throw("This seller is blacklisted. Cannot proceed.")
 
@@ -68,32 +75,6 @@ class VehicleAcquisition(Document):
 
             reg_numbers.add(v.registration_number)
 
-    def assign_evaluator(self):
-        if self.evaluator:
-            return
-
-        evaluators = frappe.get_all(
-            "Has Role",
-            filters={"role": "Evaluator"},
-            pluck="parent"
-        )
-
-        if not evaluators:
-            frappe.throw("No evaluators available")
-
-        last = frappe.db.get_single_value("Dealership Settings", "last_evaluator")
-
-        if last in evaluators:
-            index = (evaluators.index(last) + 1) % len(evaluators)
-        else:
-            index = 0
-
-        selected = evaluators[index]
-
-        self.evaluator = selected
-
-        frappe.db.set_single_value("Dealership Settings", "last_evaluator", selected)
-
     def calculate_totals(self):
 
         # Total Purchase Cost
@@ -103,34 +84,31 @@ class VehicleAcquisition(Document):
 
         # Defaults
         if not self.documentation_fees:
-            self.documentation_fees = settings.default_documentation_fee or 0
+            self.documentation_fees = settings.default_documentation_charges or 0
 
-        if not self.tax_percentage:
-            self.tax_percentage = settings.tax_percentage or 0
-
+    
         self.transportation_charges = self.transportation_charges or 0
         self.advance_paid = self.advance_paid or 0
 
-        # Tax
-        self.tax_amount = (self.total_purchase_cost * self.tax_percentage) / 100
 
         # Grand Total
         self.grand_total = (
             self.total_purchase_cost
             + self.transportation_charges
             + self.documentation_fees
-            + self.tax_amount
             - self.advance_paid
         )
 
 
     def create_vehicle_inventory(self):
+        self.inventory_map = {}
         for v in self.vehicles:
             existing = frappe.db.exists("Vehicle Inventory", {
                 "registration_number": v.registration_number
             })
 
             if existing:
+                self.inventory_map[v.registration_number] = existing
                 continue
             doc = frappe.get_doc({
                 "doctype": "Vehicle Inventory",
@@ -142,47 +120,80 @@ class VehicleAcquisition(Document):
                 "year_of_manufacture": v.year,
                 "fuel_type": v.fuel_type,
                 "transmission_type": v.transmission_type,
-                "odometerkm": v.odometer_reading,
-                "number_of_previous_owner": v.number_of_previous_owners,
-                "acquisition_cost": v.total_purchase_cost,
+                "odometer_reading": v.odometer_reading,
+                "acquisition_cost": v.purchase_price,
                 "acquisition_reference": self.name,
+                "number_of_previous_owners": v.previous_owners,
                 "status": "In Evaluation",
-            })
-            doc.insert(ignore_permissions=True, ignore_mandatory=True)
-
+            }).insert(ignore_permissions=True, ignore_mandatory=True)
+            self.inventory_map[v.registration_number] = doc.name    
     def update_seller_history(self):
+        if not self.seller:
+            return
+
         seller = frappe.get_doc("Seller Registry", self.seller)
 
         for v in self.vehicles:
-            seller.append("vehicle_history", {
-                "vehicle": v.registration_number,
-                "acquisition": self.name,
-                "date": self.acquisition_date,
-                "price": v.total_purchase_cost,
-            })
+            # Get correct Vehicle Inventory doc name
+            inventory_name = self.inventory_map.get(v.registration_number)
+
+            if not inventory_name:
+                continue
+
+            # Check for duplicate entry
+            exists = False
+            for row in seller.vehicle_history:
+                if (
+                    row.vehicle == inventory_name and
+                    row.acquisition_reference == self.name
+                ):
+                    exists = True
+                    break
+
+            # Append only if not exists
+            if not exists:
+                seller.append("vehicle_history", {
+                    "vehicle": inventory_name,                    
+                    "acquisition_reference": self.name,           
+                    "acquisition_date": self.acquisition_date,   
+                    "acquisition_cost": v.purchase_price,
+                })
 
         seller.save(ignore_permissions=True)
 
     def update_inventory_status_cancel(self):
         for v in self.vehicles:
             inventory_name = self.get_inventory_name(v.registration_number)
+            if not inventory_name:
+                frappe.log_error(f"Inventory not found for {v.registration_number}")
+                continue
 
-            if inventory_name:
-                doc = frappe.get_doc("Vehicle Inventory", inventory_name)
-                doc.status = "Written Off"
-                doc.save(ignore_permissions=True)
+            doc = frappe.get_doc("Vehicle Inventory", inventory_name)
+            doc.status = "Written Off"
+            doc.save(ignore_permissions=True)
+
 
     def update_seller_history_cancel(self):
-        seller = frappe.get_doc("Seller Registry", self.seller)
+        if not self.seller:
+            return
 
-        for row in seller.vehicle_history:
-            if row.acquisition == self.name:
-                row.status = "Cancelled"
+        rows = frappe.get_all(
+            "Seller Vehicle History",
+            filters={"parent": self.seller},
+            pluck="name"
+        )
 
-        seller.save(ignore_permissions=True)
+        if not rows:
+            frappe.log_error(f"No seller vehicle history found for {self.seller}")
+            return
+
+        for row_name in rows:
+            doc = frappe.get_doc("Seller Vehicle History", row_name)
+            doc.status = "Cancelled"
+            doc.save(ignore_permissions=True)
 
     def get_inventory_name(self, reg_no):
-        return frappe.db.get_value(
+        name = frappe.db.get_value(
             "Vehicle Inventory",
             {
                 "registration_number": reg_no,
@@ -191,45 +202,60 @@ class VehicleAcquisition(Document):
             "name"
         )
 
-    def create_evaluation_tasks(self):
+        
+        return name
 
+    def create_evaluation_tasks(self):
         settings = frappe.get_single("Dealership Settings")
 
         if not settings.auto_create_evaluation_task:
             return
 
+        # Get all evaluators
         evaluators = frappe.get_all(
             "Has Role",
             filters={"role": "Evaluator"},
             pluck="parent"
         )
+        evaluators = [e for e in evaluators if "@" in e]
 
         if not evaluators:
             frappe.throw("No evaluators available")
 
         last = settings.last_evaluator
-
-        # Start from next evaluator
-        if last in evaluators:
-            index = (evaluators.index(last) + 1) % len(evaluators)
-        else:
-            index = 0
-
+        index = (evaluators.index(last) + 1) % len(evaluators) if last in evaluators else 0
         last_used = None
 
+        # Define your 8 default checklist items
+        default_checklist = [
+            {"check_item": "Engine Condition"},
+            {"check_item": "Transmission"},
+            {"check_item": "Brakes"},
+            {"check_item": "Suspension"},
+            {"check_item": "Tires & Wheels"},
+            {"check_item": "Lights & Indicators"},
+            {"check_item": "Interior Condition"},
+            {"check_item": "Exterior Condition"},
+        ]
+
         for v in self.vehicles:
+            inventory = self.inventory_map.get(v.registration_number)
+            if not inventory:
+                continue
+
             selected = evaluators[index]
 
+            # Create task with only 8 checklist items
             frappe.get_doc({
                 "doctype": "Vehicle Evaluation Task",
                 "vehicle_acquisition": self.name,
-                "vehicle_inventory": self.get_inventory_name(v.registration_number),
+                "vehicle_inventory": inventory,
                 "evaluator": selected,
-                "status": "Pending"
+                "status": "Pending",
+                "evaluation_checklist": default_checklist
             }).insert(ignore_permissions=True)
 
             last_used = selected
-
             index = (index + 1) % len(evaluators)
 
         if last_used:

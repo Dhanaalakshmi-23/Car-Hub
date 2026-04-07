@@ -1,5 +1,5 @@
 # Copyright (c) 2026, Dhanaa Lakshmi and Contributors
-# See liconsulting_engagementsnse.txt
+# See license.txt
 
 # import frappe
 from frappe.tests import IntegrationTestCase
@@ -13,9 +13,9 @@ IGNORE_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 
 
 
-class IntegrationTestConsultingEngagements(IntegrationTestCase):
+class IntegrationTestProfitLog(IntegrationTestCase):
 	"""
-	Integration tests for ConsultingEngagements.
+	Integration tests for ProfitLog.
 	Use this class for testing interactions between multiple components.
 	"""
 

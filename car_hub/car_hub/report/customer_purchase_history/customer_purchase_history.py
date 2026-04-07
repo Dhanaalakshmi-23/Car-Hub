@@ -25,9 +25,9 @@ def get_data(filters):
             vs.vehicle,
             vi.manufacturer,
             vi.model,
-            vs.posting_date AS date,
+            vs.sale_date AS date,
             vs.selling_price AS amount,
-            vs.profit
+            vs.profit_margin
 
         FROM `tabVehicle Sale` vs
 

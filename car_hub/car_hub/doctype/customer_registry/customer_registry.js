@@ -3,18 +3,18 @@
 
 frappe.ui.form.on('Customer Registry', {
 
-    refresh: function(frm) {
-        toggle_fields(frm);
+    // refresh: function(frm) {
+    //     toggle_fields(frm);
 
-        if (!frm.is_new()) {
-            frm.add_custom_button("Purchase History", function() {
-                frappe.set_route("query-report", "Customer Purchase History", {
-                    customer: frm.doc.name
-                });
-            });
-        }
-    
-    },
+    //     if (!frm.is_new()) {
+    //         let label = `Purchase History for ${frm.doc.name}`;
+    //         frm.add_custom_button(label, function() {
+    //             frappe.set_route("query-report", "Customer Purchase History", {
+    //                 customer: frm.doc.name
+    //             });
+    //         });
+    //     }
+    // },
 
     customer_type: function(frm) {
         toggle_fields(frm);
@@ -42,4 +42,5 @@ function toggle_referral(frm) {
     } else {
         frm.set_df_property("referred_by", "reqd", 0);
     }
+
 }

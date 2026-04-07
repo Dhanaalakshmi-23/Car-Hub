@@ -55,7 +55,7 @@ def send_slow_inventory_report():
         email = frappe.db.get_value("User", m.parent, "email")
         if email:
             frappe.sendmail(
-                recipients=[email],
+                recipients=["dhanaalakshminarayanan@gmail.com"],
                 subject=f"[Car Hub] Weekly Slow-Moving Inventory — {len(slow_vehicles)} vehicles",
                 message=body,
             )

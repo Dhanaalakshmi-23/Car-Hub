@@ -8,70 +8,70 @@ app_license = "mit"
 #Module - 8 Version check
 required_apps = {"frappe": ">=15.0.0"}
 
-fixtures = [
+# fixtures = [
 
-    # Roles
-    {
-        "doctype": "Role", 
-        "filters": [["name", "in", [
-        "Sales Consultant",
-        "Sales Manager",
-        "Acquisition Manager",
-        "Evaluator"
-    ]]]
-    },
+#     # Roles
+#     {
+#         "doctype": "Role", 
+#         "filters": [["name", "in", [
+#         "Sales Consultant",
+#         "Sales Manager",
+#         "Acquisition Manager",
+#         "Evaluator"
+#     ]]]
+#     },
 
-    # Customizations
-    {
-        "doctype": "Custom Field", 
-        "filters": [["module", "=", "Car Hub"]]
-    },
-    {
-        "doctype": "Property Setter", 
-        "filters": [["module", "=", "Car Hub"]]
-        },
+#     # Customizations
+#     {
+#         "doctype": "Custom Field", 
+#         "filters": [["module", "=", "Car Hub"]]
+#     },
+#     {
+#         "doctype": "Property Setter", 
+#         "filters": [["module", "=", "Car Hub"]]
+#         },
 
-    # Workflows
-    {
-        "doctype": "Workflow"
-        },
-    {
-        "doctype": "Workflow State"
-        },
-    {
-        "doctype": "Workflow Action Master"
-        },
+#     # # Workflows
+#     # {
+#     #     "doctype": "Workflow"
+#     #     },
+#     # {
+#     #     "doctype": "Workflow State"
+#     #     },
+#     # {
+#     #     "doctype": "Workflow Action Master"
+#     #     },
 
-    # Print Formats
-    {
-        "doctype": "Print Format", 
-        "filters": [["module", "=", "Car Hub"]]
-        },
+#     # Print Formats
+#     {
+#         "doctype": "Print Format", 
+#         "filters": [["module", "=", "Car Hub"]]
+#         },
 
-    # Reports
-    {
-        "doctype": "Report", "filters": [["module", "=", "Car Hub"]]
-    },
+#     # Reports
+#     {
+#         "doctype": "Report", "filters": [["module", "=", "Car Hub"]]
+#     },
 
-    # Dashboard
-    {
-        "doctype": "Workspace", 
-        "filters": [["module", "=", "Car Hub"]]
-        },
-    {
-        "doctype": "Dashboard Chart", 
-        "filters": [["module", "=", "Car Hub"]]
-        },
-    {
-        "doctype": "Number Card", 
-        "filters": [["module", "=", "Car Hub"]]
-        },
+#     # Dashboard
+#     {
+#         "doctype": "Workspace", 
+#         "filters": [["module", "=", "Car Hub"]]
+#         },
+#     {
+#         "doctype": "Dashboard Chart", 
+#         "filters": [["module", "=", "Car Hub"]]
+#         },
+#     {
+#         "doctype": "Number Card", 
+#         "filters": [["module", "=", "Car Hub"]]
+#         },
 
-    # Settings
-    {
-        "doctype": "Dealership Settings"
-        },
-]
+#     # Settings
+#     {
+#         "doctype": "Dealership Settings"
+#         },
+# ]
 
 #after install default data setup
 after_install = {
@@ -83,11 +83,11 @@ after_install = {
 
 scheduler_events = {
     "weekly": [
-        "car_hub.car_hub.utils.notifications.send_slow_inventory_report",
+        "car_hub.utils.scheduled_notifications.send_slow_inventory_report",
     ],
     "daily_long": [
-        "car_hub.car_hub.utils.notifications.auto_close_delivered_sales",   # 6 PM
-        "car_hub.car_hub.utils.notifications.log_overdue_evaluations",      # 9 AM
+        "car_hub.utils.scheduled_notifications.auto_close_delivered_sales",   # 6 PM
+        "car_hub.utils.scheduled_notifications.log_overdue_evaluations",      # 9 AM
     ],
 }
 

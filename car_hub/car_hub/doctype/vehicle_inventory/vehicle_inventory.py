@@ -4,6 +4,7 @@
 import frappe
 from frappe.model.document import Document
 from datetime import datetime
+from car_hub.utils.notifications import notify_matching_customers
 
 
 class VehicleInventory(Document):
@@ -17,12 +18,7 @@ class VehicleInventory(Document):
 		self.set_condition_auto()
 
 	def after_insert(self):
-		# Trigger background job after first save
-		frappe.enqueue( # NOtification - 1
-			"car_hub.car_hub.doctype.vehicle_inventory.vehicle_inventory.notify_customers",
-			vehicle=self.name
-		)
-
+		notify_matching_customers(self.name)
 
 	def validate_registration(self):
 		if frappe.db.exists("Vehicle Inventory", {
@@ -48,9 +44,9 @@ class VehicleInventory(Document):
 			profit = self.expected_selling_price - self.acquisition_cost
 			profit_percent = (profit / self.acquisition_cost) * 100
 
-			if profit_percent < settings.min_profit_margin:
+			if profit_percent < settings.minimum_profit_margin:
 				frappe.throw(
-					f"Profit margin {profit_percent:.2f}% is below minimum required {settings.min_profit_margin}%"
+					f"Profit margin {profit_percent:.2f}% is below minimum required {settings.minimum_profit_margin}%"
 				)
 	def validate_leaf_category(self):
 		if self.vehicle_classification:
@@ -62,12 +58,12 @@ class VehicleInventory(Document):
 
 	def set_condition_auto(self):
 		# Only auto-set if not manually set
-		if not self.condition_rating and self.odometerkm:
-			if self.odometerkm < 5000:
+		if not self.condition_rating and self.odometer_reading:
+			if self.odometer_reading < 5000:
 				self.condition_rating = "Excellent"
-			elif self.odometerkm < 20000:
+			elif self.odometer_reading < 20000:
 				self.condition_rating = "Good"
-			elif self.odometerkm < 50000:
+			elif self.odometer_reading < 50000:
 				self.condition_rating = "Fair"
 			else:
 				self.condition_rating = "Poor"
@@ -79,41 +75,3 @@ class VehicleInventory(Document):
 			frappe.throw("Cannot delete vehicle. It is linked with a Sales Transaction.")
 
 
-
-def notify_customers(vehicle):
-
-	doc = frappe.get_doc("Vehicle Inventory", vehicle)
-
-	# Get customers within budget
-	customers = frappe.get_all(
-		"Customer Registry",
-		fields=["name", "email_address"],
-		filters={
-			"min_budget": ["<=", doc.expected_selling_price],
-			"max_budget": [">=", doc.expected_selling_price]
-		}
-	)
-
-	for cust in customers:
-		if not cust.min_budget or not cust.max_budget:
-			continue
-
-		if not (cust.min_budget <= doc.expected_selling_price <= cust.max_budget):
-			continue
-		if cust.email_address:
-			frappe.sendmail(
-				recipients=["dhanaalakshminarayanan@gmail.com"],
-				subject="New Vehicle Available",
-				message=f"""
-Hello,
-
-A new vehicle {doc.manufacturer} {doc.model} is available within your budget.
-
-Price: {doc.expected_selling_price}
-Type: {doc.vehicle_classification}
-
-Visit showroom for more details.
-
-Thank you.
-"""
-			)

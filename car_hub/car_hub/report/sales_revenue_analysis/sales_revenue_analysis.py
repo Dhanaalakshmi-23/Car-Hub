@@ -4,7 +4,6 @@ def execute(filters=None):
     columns = get_columns()
     data = get_data(filters)
     chart = get_chart(data)
-
     return columns, data, None, chart
 
 
@@ -17,53 +16,58 @@ def get_columns():
         {"label": "Avg Profit %", "fieldname": "avg_profit", "fieldtype": "Percent", "width": 120},
     ]
 
-
 def get_data(filters):
-    conditions = ""
+    conditions = []
+    values = {}
 
     if filters.get("from_date"):
-        conditions += " AND vs.posting_date >= %(from_date)s"
+        conditions.append("vs.sale_date >= %(from_date)s")
+        values["from_date"] = filters.get("from_date")
+
     if filters.get("to_date"):
-        conditions += " AND vs.posting_date <= %(to_date)s"
-    if filters.get("sales_consultant"):
-        conditions += " AND vs.sales_consultant = %(sales_consultant)s"
+        conditions.append("vs.sale_date <= %(to_date)s")
+        values["to_date"] = filters.get("to_date")
+
+    # if filters.get("sales_consultant"):
+    #     conditions.append("vs.sales_consultant = %(sales_consultant)s")
+    #     values["sales_consultant"] = filters.get("sales_consultant")
+
+    where_clause = " AND ".join(conditions)
+    if where_clause:
+        where_clause = " AND " + where_clause
 
     query = f"""
-        SELECT
-            vc.name AS classification,
-            COUNT(vs.name) AS count,
-            SUM(vs.selling_price) AS revenue,
-            SUM(vs.profit) AS profit,
-            AVG(vs.profit_margin) AS avg_profit
+            SELECT
+                vc.name AS classification,
+                COUNT(vs.name) AS count,
+                SUM(vs.selling_price) AS revenue,
+                SUM(vs.selling_price - IFNULL(va.total_purchase_cost, 0)) AS profit,
+                AVG(
+                    CASE 
+                        WHEN vs.selling_price > 0 
+                        THEN ((vs.selling_price - IFNULL(va.total_purchase_cost, 0)) / vs.selling_price) * 100
+                        ELSE 0 
+                    END
+                ) AS avg_profit
+            FROM `tabVehicle Sale` vs
+            LEFT JOIN `tabVehicle Inventory` vi ON vs.vehicle = vi.name
+            LEFT JOIN `tabVehicle Acquisition` va ON vi.vehicle_acquisition = va.name
+            LEFT JOIN `tabVehicle Classification` vc ON vi.vehicle_classification = vc.name
+            WHERE vs.docstatus = 1
+            {where_clause}
+            GROUP BY vc.name
+        """
 
-        FROM `tabVehicle Sale` vs
-
-        JOIN `tabVehicle Inventory` vi
-            ON vs.vehicle = vi.name
-
-        JOIN `tabVehicle Classification` vc
-            ON vi.vehicle_classification = vc.name
-
-        WHERE vs.docstatus = 1
-        {conditions}
-
-        GROUP BY vc.name
-    """
-
-    return frappe.db.sql(query, filters, as_dict=True)
-
+    return frappe.db.sql(query, values, as_dict=True)
 
 def get_chart(data):
-    labels = [d.classification for d in data]
-    values = [d.revenue for d in data]
-
     return {
         "data": {
-            "labels": labels,
+            "labels": [d.classification for d in data],
             "datasets": [
                 {
                     "name": "Revenue",
-                    "values": values
+                    "values": [d.revenue for d in data]
                 }
             ]
         },

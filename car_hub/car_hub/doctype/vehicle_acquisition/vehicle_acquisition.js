@@ -2,18 +2,74 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Vehicle Acquisition', {
+        before_cancel: function(frm) {
+
+        return new Promise((resolve, reject) => {
+
+            let d = new frappe.ui.Dialog({
+                title: 'Enter Cancellation Reason',
+                fields: [
+                    {
+                        label: 'Reason',
+                        fieldname: 'reason',
+                        fieldtype: 'Small Text',
+                        reqd: 1
+                    }
+                ],
+                primary_action_label: 'Submit',
+                primary_action(values) {
+
+                    // set value to doc
+                    frm.set_value('cancellation_reason', values.reason);
+
+                    d.hide();
+                    resolve();  // allow cancel
+                }
+            });
+
+            d.show();
+        });
+    },
 
     refresh: function(frm) {
         calculate_totals(frm);
-    },
+        if (frm.doc.docstatus === 0 && frm.doc.status === "Draft") {
+            frm.add_custom_button('Send for Approval', () => {
+                frm.set_value('status', 'Pending Approval');
+                frm.save();
+            });
+        }
 
-    transportation_charges: calculate_totals,
+        if (frm.doc.status === "Pending Approval") {
+            frm.add_custom_button('Approve', () => {
+                frm.set_value('status', 'Approved');
+                frm.save();
+            });
+        }
+        if (frm.doc.status === "Rejected") {
+            frm.disable_save();
+            frm.disable_submit();
+        }
+        if (frm.doc.status === "Pending Approval") {
+            frm.add_custom_button('Reject', () => {
+                frm.set_value('status', 'Rejected');
+                frm.save();
+            });
+        }
+    },
+    transportation_km: function(frm) {
+        frm.call('calculate_totals').then(() => {
+            frm.refresh_fields([
+                'transportation_charges',
+                'grand_total',
+                'total_purchase_cost'
+            ]);
+        });
+    },
     documentation_fees: calculate_totals,
     advance_paid: calculate_totals,
-    tax_percentage: calculate_totals,
 
 });
-
 
 frappe.ui.form.on('Vehicle Acquisition Item', {
 
@@ -45,13 +101,10 @@ function calculate_totals(frm) {
 
     frm.set_value("total_purchase_cost", total);
 
-    let tax = (total * (frm.doc.tax_percentage || 0)) / 100;
-    frm.set_value("tax_amount", tax);
 
     let grand = total
         + (frm.doc.transportation_charges || 0)
         + (frm.doc.documentation_fees || 0)
-        + tax
         - (frm.doc.advance_paid || 0);
 
     frm.set_value("grand_total", grand);

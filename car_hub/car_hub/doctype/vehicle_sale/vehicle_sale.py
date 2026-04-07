@@ -3,7 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
-from car_hub.utils.notifications import notify_sale_submitted,notify_documentation_in_progress, notify_vehicle_delivered,notify_sale_cancelled
+from car_hub.utils.notifications import notify_sale_submitted,notify_documentation_in_progress, notify_vehicle_delivered,notify_sale_cancelled,notify_discount_approval_needed
 from frappe.utils.data import today
 
 
@@ -14,25 +14,30 @@ class VehicleSale(Document):
         self.fetch_dealership_details()
 
     def validate(self):
+        # settings = frappe.get_single("Dealership Settings")
+
+        # if self.discount_percentage > settings.max_discount_percent:
+        #     if self.workflow_state != "Pending Discount Approval":
+        #         frappe.throw("Discount exceeds limit. Request approval first.")
+
+        #     if self.approval_status != "Approved":
+        #         frappe.throw("Discount not approved by Sales Manager.")
         self.fetch_vehicle_price()
         self.calculate_addons()
         self.calculate_totals()
         self.validate_discount()
         self.calculate_profit()
-        self.check_discount_limit()
 
-    def before_save(self):
-        self.handle_discount_workflow()
     def before_submit(self):
         self.prevent_submit_without_approval()
+
     def on_update(self):
-        if self.status == "Documentation In Progress":
-            notify_documentation_in_progress(self.name) # Notification 3
+        if self.workflow_state == "Pending Discount Approval":
+            notify_documentation_in_progress(self.name)
         if self.status == "Delivered":
             if not self.delivery_date:
                 self.db_set("delivery_date", today())
-            notify_vehicle_delivered(self.name) # Notification 4: Delivered → Email + System
-
+            notify_vehicle_delivered(self.name)
     def fetch_dealership_details(self):
         settings = frappe.get_single("Dealership Settings")
 
@@ -67,12 +72,12 @@ class VehicleSale(Document):
             as_dict=True
         )
 
-        self.documentation_charges = float(self.documentation_charges or settings.documentation_charges or 0)
+        self.documentation_charges = float(self.documentation_charges or settings.default_documentation_charges or 0)
         self.selling_price = float(self.selling_price or 0)
         self.transfer_fee = float(self.transfer_fee or 0)
         self.insurance_charges = float(self.insurance_charges or 0)
         self.accessories_total = float(self.accessories_total or 0)
-        self.discount = float(self.discount or 0)
+        self.discount = float(self.discount_percentage or 0)
 
         self.subtotal = (
             self.selling_price
@@ -97,9 +102,15 @@ class VehicleSale(Document):
             "max_discount_percent_without_approval"
         ) or 0
 
-        if (self.discount or 0) > max_discount:
-            frappe.throw("Discount exceeds maximum allowed limit!")
-
+        # Only block DIRECT submit (not workflow)
+        if self.discount and self.discount > max_discount:
+            if self.workflow_state == "Draft":
+                frappe.msgprint(
+                    "Discount exceeds allowed limit. Please request approval."
+                )
+        discount_amount = getattr(self, "discount_amount", 0)
+        discount_pct = self.discount
+        notify_discount_approval_needed(self.name, discount_amount, discount_pct)
     def calculate_profit(self):
         if not self.vehicle:
             return
@@ -121,69 +132,18 @@ class VehicleSale(Document):
             frappe.msgprint("Warning: Profit margin is below minimum!")
 
 
-    #Check discount amount
-    def check_discount_limit(self):
-        max_discount = frappe.db.get_single_value(
-            "Dealership Settings", "max_discount_percent_without_approval"
-        ) or 0
-
-        if self.discount and self.discount > max_discount:
-            if self.workflow_state != "Pending Discount Approval":
-                frappe.msgprint(
-                    "Discount exceeds allowed limit. Moving to Pending Approval."
-                )
-    # Handle auto move approval state and notifications
-    def handle_discount_workflow(self):
-        max_discount = frappe.db.get_single_value(
-            "Dealership Settings", "max_discount_percent_without_approval"
-        ) or 0
-
-        if self.discount and self.discount > max_discount:
-
-            # Move to Pending Approval
-            if self.workflow_state != "Pending Discount Approval":
-                self.workflow_state = "Pending Discount Approval"
-                self.notify_managers()
-
-        else:
-            # If discount corrected, allow back to Draft
-            if self.workflow_state == "Pending Discount Approval":
-                self.workflow_state = "Draft"
 
     # prevent submission if discount is not approved
     def prevent_submit_without_approval(self):
         max_discount = frappe.db.get_single_value(
-            "Dealership Settings", "max_discount_percent_without_approval"
+            "Dealership Settings",
+            "max_discount_percent_without_approval"
         ) or 0
 
         if self.discount and self.discount > max_discount:
-            if self.workflow_state != "Draft":
-                frappe.throw(
-                    "Cannot submit. Discount not approved by Sales Manager."
-                )
-
-    # Notify Email to Sales Managers for Approval
-    def notify_managers(self):
-        managers = frappe.get_all(
-            "Has Role",
-            filters={"role": "Sales Manager"},
-            pluck="parent"
-        )
-
-        if not managers:
-            return
-
-        for user in managers:
-            frappe.sendmail(
-                recipients=[user],
-                subject="Discount Approval Required",
-                message=f"""
-                Vehicle Sale <b>{self.name}</b> requires approval.<br><br>
-                Discount entered: <b>{self.discount_percentage}%</b><br>
-                Please review and approve/reject.
-                """
+            frappe.throw(
+                "Cannot submit. Discount requires manager approval."
             )
-    
 
 
     def on_submit(self):
@@ -212,47 +172,86 @@ class VehicleSale(Document):
         )
 
     def update_customer_history(self):
+        if not self.customer:
+            return
+
         customer = frappe.get_doc("Customer Registry", self.customer)
 
         customer.append("purchase_history", {
             "vehicle": self.vehicle,
-            "date": self.sale_date,
+            "purchase_date": self.sale_date,
             "sale_amount": self.grand_total
         })
 
         customer.save(ignore_permissions=True)
 
     def revert_customer_history(self):
-        customer = frappe.get_doc("Customer Registry", self.customer)
+        if not self.customer:
+            return
 
-        customer.purchase_history = [
-            row for row in customer.purchase_history
-            if row.vehicle != self.vehicle
-        ]
+        rows = frappe.get_all(
+            "Customer Purchase History",
+            filters={
+                "parent": self.customer,
+                "vehicle": self.vehicle
+            },
+            pluck="name"
+        )
 
-        customer.save(ignore_permissions=True)
+        for row in rows:
+            frappe.db.delete("Customer Purchase History", row)
 
     def handle_referral_bonus(self):
-        customer = frappe.get_doc("Customer Registry", self.customer)
+        if not self.customer:
+            return
 
-        if customer.referred_by:
-            referrer = frappe.get_doc("Customer Registry", customer.referred_by)
+        referrer = frappe.db.get_value(
+            "Customer Registry",
+            self.customer,
+            "referred_by"
+        )
 
+        if referrer:
             bonus = self.grand_total * 0.02
-            referrer.referral_bonus_earned += bonus
 
-            referrer.save(ignore_permissions=True)
+            current_bonus = frappe.db.get_value(
+                "Customer Registry",
+                referrer,
+                "referral_bonus_earned"
+            ) or 0
+
+            frappe.db.set_value(
+                "Customer Registry",
+                referrer,
+                "referral_bonus_earned",
+                current_bonus + bonus
+            )
 
     def reverse_referral_bonus(self):
-        customer = frappe.get_doc("Customer Registry", self.customer)
+        if not self.customer:
+            return
 
-        if customer.referred_by:
-            referrer = frappe.get_doc("Customer Registry", customer.referred_by)
+        referrer = frappe.db.get_value(
+            "Customer Registry",
+            self.customer,
+            "referred_by"
+        )
 
+        if referrer:
             bonus = self.grand_total * 0.02
-            referrer.referral_bonus_earned -= bonus
 
-            referrer.save(ignore_permissions=True)
+            current_bonus = frappe.db.get_value(
+                "Customer Registry",
+                referrer,
+                "referral_bonus_earned"
+            ) or 0
+
+            frappe.db.set_value(
+                "Customer Registry",
+                referrer,
+                "referral_bonus_earned",
+                current_bonus - bonus
+            )
 
     def log_profit(self):
         frappe.get_doc({

@@ -31,6 +31,7 @@
   "auto_create_evaluation_task",
   "charges_section",
   "default_documentation_charges",
+  "cost_per_km",
   "column_break_txos",
   "transfer_fee"
  ],
@@ -179,13 +180,18 @@
    "fieldname": "max_discount_percent",
    "fieldtype": "Percent",
    "label": "Max Discount Percent"
+  },
+  {
+   "fieldname": "cost_per_km",
+   "fieldtype": "Currency",
+   "label": "Transportation Cost Per KM"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-29 11:24:45.874765",
+ "modified": "2026-04-03 13:21:47.466479",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Dealership Settings",

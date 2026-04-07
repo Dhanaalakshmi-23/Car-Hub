@@ -22,8 +22,7 @@
    "fieldname": "registration_number",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Registration Number",
-   "reqd": 1
+   "label": "Registration Number"
   },
   {
    "fieldname": "manufacturer",
@@ -34,22 +33,26 @@
   {
    "fieldname": "model",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Model"
   },
   {
    "fieldname": "year",
    "fieldtype": "Int",
+   "in_list_view": 1,
    "label": "Year"
   },
   {
    "fieldname": "fuel_type",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Fuel Type",
    "options": "Petrol\nDiesel\nCNG\nElectric\nHybrid"
   },
   {
    "fieldname": "transmission_type",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Transmission Type",
    "options": "Manual\nAutomatic\nCVT"
   },
@@ -79,7 +82,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-30 12:24:31.933872",
+ "modified": "2026-04-06 14:49:22.095576",
  "modified_by": "Administrator",
  "module": "Car Hub",
  "name": "Vehicle Acquisition Item",
